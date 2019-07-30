@@ -36,7 +36,13 @@ MuseScore {
       width: 400
       height: 200
 
-      onRun: {
+    onRun: {
+	  if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
+	      versionError.open()
+              Qt.quit();
+	      return;
+           }
+
           console.log("hello triller: onRun");
 	  var note = find_usable_note();
 	  if (note) {
@@ -349,5 +355,15 @@ MuseScore {
       }
    }
 
+    
+ MessageDialog {
+      id: versionError
+      visible: false
+      title: qsTr("Unsupported MuseScore Version")
+      text: qsTr("This plugin needs MuseScore 3.3 or later")
+      onAccepted: {
+         Qt.quit()
+         }
+      }
 
 }
