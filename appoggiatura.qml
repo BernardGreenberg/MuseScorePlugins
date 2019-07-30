@@ -54,17 +54,23 @@ MuseScore {
       height: 120
 
       onRun: {
+          if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
+              versionError.open()
+              Qt.quit();
+              return;
+           }
           console.log("hello adjust appoggiatura: onRun");
-	  curScore.createPlayEvents();  // Needed to get MS to realize the appogg 1st time
-	  var note = find_usable_note();
-	  if (note) {
-	      the_note = note;
-	      perMille.text = sum_graces(note) + ""
-	  } else {
-	      console.log("onRun didn't find a usable appogg")
+          curScore.createPlayEvents();  // Needed to get MS to realize the appogg 1st time
+          var note = find_usable_note();
+          if (note) {
+              the_note = note;
+              perMille.text = sum_graces(note) + ""
+          } else {
+              console.log("onRun didn't find a usable appogg")
               complaintDialog.open()
-	      Qt.quit();
-	  }
+              Qt.quit();
+	      return;
+          }
       }
 
     function find_usable_note() {
@@ -79,14 +85,14 @@ MuseScore {
                     var note = element;
                     var summa_gratiarum = sum_graces(note);
                     if (summa_gratiarum) {
-			var mnplayevs = note.playEvents;
-			var mpe0 = mnplayevs[0];
-			dump_play_ev(mpe0);
-			var fuzz = Math.abs(mpe0.ontime - summa_gratiarum);
-			if (fuzz < 4) {
+                        var mnplayevs = note.playEvents;
+                        var mpe0 = mnplayevs[0];
+                        dump_play_ev(mpe0);
+                        var fuzz = Math.abs(mpe0.ontime - summa_gratiarum);
+                        if (fuzz < 4) {
                             return note;
-			}
-		    }
+                        }
+                    }
                 }
             }
         }
@@ -98,8 +104,8 @@ MuseScore {
         var grace_chords = chord.graceNotes;  //it lies.
         //console.log("grace chords", grace_chords);    
         if (!grace_chords || grace_chords.length == 0) {
-	    return false;
-	}
+            return false;
+        }
 
         console.log("N grace chords", grace_chords.length);
         var summa = 0
@@ -121,112 +127,112 @@ MuseScore {
    }
 
     function applyChanges() {
-	var note = the_note;
-	if (!note) {
-	    //console.log("No note at apply time.")
-	    return false;
-	}
+        var note = the_note;
+        if (!note) {
+            //console.log("No note at apply time.")
+            return false;
+        }
         var new_transit = parseInt(perMille.text);
         if (isNaN(new_transit)) {
             return false;
         }
-	//console.log("Begin apply pass, new transit=", new_transit);
+        //console.log("Begin apply pass, new transit=", new_transit);
 
         var mpe0 = note.playEvents[0];
         var orig_transit = mpe0.ontime;  // must be so if we are here.
         var inc = new_transit - orig_transit;
         var grace_chords = note.parent.graceNotes; //really
         //console.log("Apply pass grace_chords", grace_chords);
-	var ngrace = grace_chords.length;  //chords, really
-	var new_grace_len = Math.floor(new_transit/ngrace);
+        var ngrace = grace_chords.length;  //chords, really
+        var new_grace_len = Math.floor(new_transit/ngrace);
 
         curScore.startCmd();
-	var current = 0;
-	for (var i = 0; i < ngrace; i++) {
-	    var chord = grace_chords[i];
-	    for (var j = 0; j < chord.notes.length; j++) {
-		var gn0 = chord.notes[j];
-		var pe00 = gn0.playEvents[0];
-		pe00.len = new_grace_len;
-		pe00.ontime = current;
-	    }
-	    current += new_grace_len;
-	}
-	var main_on_time = current;
-	var main_off_time = mpe0.ontime + mpe0.len;
-	var main_len = main_off_time - main_on_time;
-	var notachord = note.parent;
-	var chord_notes = notachord.notes;
-	for (var k = 0; k < chord_notes.length; k++) {
-	    var cnote = chord_notes[k];
-	    var mpce0 = cnote.playEvents[0];
-	    mpce0.ontime = main_on_time;
-	    mpce0.len = main_len;
-	}
+        var current = 0;
+        for (var i = 0; i < ngrace; i++) {
+            var chord = grace_chords[i];
+            for (var j = 0; j < chord.notes.length; j++) {
+                var gn0 = chord.notes[j];
+                var pe00 = gn0.playEvents[0];
+                pe00.len = new_grace_len;
+                pe00.ontime = current;
+            }
+            current += new_grace_len;
+        }
+        var main_on_time = current;
+        var main_off_time = mpe0.ontime + mpe0.len;
+        var main_len = main_off_time - main_on_time;
+        var notachord = note.parent;
+        var chord_notes = notachord.notes;
+        for (var k = 0; k < chord_notes.length; k++) {
+            var cnote = chord_notes[k];
+            var mpce0 = cnote.playEvents[0];
+            mpce0.ontime = main_on_time;
+            mpce0.len = main_len;
+        }
         curScore.endCmd()
         console.log("Did it!", current);
         return true;    
     }   
 
     function getCurrent() {
-	var note = find_usable_note(false);
-	if (!note) {
-	    //console.log("No note at getCurrent time.")
-	    return false;
-	}
-	var summa = sum_graces(note);
-	if (!summa) {
-	    //console.log("No sum of graces at getCurrent time.")
-	    return false;
-	}
-	perMille.text = summa + ""
-	return true;
+        var note = find_usable_note(false);
+        if (!note) {
+            //console.log("No note at getCurrent time.")
+            return false;
+        }
+        var summa = sum_graces(note);
+        if (!summa) {
+            //console.log("No sum of graces at getCurrent time.")
+            return false;
+        }
+        perMille.text = summa + ""
+        return true;
     }
    
     function maybe_finish() {
-	if (applyChanges()) {
-	    Qt.quit();
-	}
+        if (applyChanges()) {
+            Qt.quit();
+        }
     }
 
     GridLayout {
-	id: 'mainLayout'
-	anchors.fill: parent
-	anchors.margins: 10
-	columns: 2
+        id: 'mainLayout'
+        anchors.fill: parent
+        anchors.margins: 10
+        columns: 2
 
-	Label {
-	    text:  "Per Mille"
+        Label {
+            text:  "Per Mille"
         }
-	TextField {
-	    id: perMille
-	    implicitHeight: 24
-	    placeholderText: "/1000"
-	    focus: true
-	    Keys.onEscapePressed : {
-		Qt.quit()
-	    }
-	    Keys.onReturnPressed : {
-		maybe_finish();
-	    }
-	}
-	Button {
-	    id: applyButton
-	    Layout.columnSpan:1
-	    text: qsTranslate("PrefsDialogBase", "Apply")
-	    onClicked: {
-		maybe_finish();
-	    }
-	}
+        TextField {
+            id: perMille
+            implicitHeight: 24
+            placeholderText: "/1000"
+            focus: true
+            Keys.onEscapePressed : {
+                Qt.quit()
+            }
+            Keys.onReturnPressed : {
+                maybe_finish();
+            }
+        }
+        Button {
+            id: applyButton
+            Layout.columnSpan:1
+            text: qsTranslate("PrefsDialogBase", "Apply")
+            onClicked: {
+                maybe_finish();
+            }
+        }
 
-	Button {
-	    id: cancelButton
-	    Layout.columnSpan: 1
-	    text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
-	    onClicked: {
-		Qt.quit();
-	    }
-	}
+        Button {
+            id: cancelButton
+            Layout.columnSpan: 1
+            text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
+            onClicked: {
+                Qt.quit();
+            }
+        }
 
     }
 
@@ -239,12 +245,21 @@ MuseScore {
      text: "No note having appoggiature is selected."
       detailedText:  "Either you have not selected a note, or " +
          "the note, or none of the notes you have selected, have " +
-	 "any appoggiature before them."
+         "any appoggiature before them."
      onAccepted: {
-	 console.log("Messagedlg onaccepted");
+         console.log("Messagedlg onaccepted");
          Qt.quit()
       }
    }
 
 
+ MessageDialog {
+      id: versionError
+      visible: false
+      title: qsTr("Unsupported MuseScore Version")
+      text: qsTr("This plugin needs MuseScore 3.3 or later")
+      onAccepted: {
+         Qt.quit()
+         }
+      }
 }
