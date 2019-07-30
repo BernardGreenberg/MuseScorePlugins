@@ -5,7 +5,7 @@ Working with Dale Larson, Matt McClintock, and Dmitrios95, we have effected chan
 
 The (long-intended) result of this is a trio of plugins hosted here, which allow customization of note attack and release, fraction of a note consumed by one or more appoggiature, and customized Baroque trills, on an individual note (or selection) basis, via straightforward, convenient GUI interface, removing the need to ever deal with the arcane and clumsy Piano Roll Editor or “hacked portati” or other articulations. Hopefully, with some exposure and design iteration, these will become “standard plugins”, although I would like to see this functionality in the core.
 
-The plugins are provided here directly downloadable.  You must install them into the Plugins directory, and follow the normal directions to install plugins (https://musescore.org/en/handbook/3/plugins). Right now, these will not work with the Released MuseScore 3.2; they requirMuseScore 3.3, now only available as a “development build” for your OS, one at least as new as 14:00 UTC (10:00 EST) 30 July 2019 (visit https://musescore.org/en/download#Development-builds).  We fully anticipate the official 3.3 betas and release of MS will include these features.
+The plugins are provided here directly downloadable.  You must install them into the Plugins directory, and follow the normal directions to install plugins (https://musescore.org/en/handbook/3/plugins). Note that these plugins require Muse=Score 3.2: they will not work with the Released MuseScore 3.2. MuseScore 3.3 is now only available as a “development build” for your OS, and you need one at least as new as 14:00 UTC (10:00 EST) 30 July 2019 (visit https://musescore.org/en/download#Development-builds).  We fully anticipate the official 3.3 betas and release of MS will include these features.
 
 The plugins and their musical effects are:
 
@@ -26,4 +26,4 @@ https://musescore.com/bsg/scores/5658151
 
 (Scores customized with these plugins will play correctly in standard MuseScore 3, including the site).
 
-Link to official MuseScore Plugin Project page: https://musescore.org/en/project/articulation-and-ornamentation-control
+Link to official MuseScore Plugin Project page for this project: https://musescore.org/en/project/articulation-and-ornamentation-control
