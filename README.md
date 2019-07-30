@@ -20,7 +20,7 @@ The plugins and their musical effects are:
 Demo of a Bach chorus with almost every note phrased, with text awareness:
 https://musescore.com/bsg/gute_nacht_o_wesen
 
-Demo of a very great Bach aria with solo parts fully phrased and customized appoggiature:
+Demo of a very great Bach aria with solo parts fully phrased and customized *appoggiature:*
 https://musescore.com/bsg/erbarme_dich
 
 Demo of trill generator results:
