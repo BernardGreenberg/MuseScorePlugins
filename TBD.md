@@ -13,4 +13,4 @@ Upper-start trill option (odd count, no _Vorschag_).
 
 Pattern-driven (pairs, triplets, etc) articulation
 
-Possibly display all off-times in a range as tiny numbers. Big problem of how to undo.
+Possibly display all off-times in a range as tiny numbers. Big problem of how/when to undo.
