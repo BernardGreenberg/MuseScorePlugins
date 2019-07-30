@@ -29,3 +29,5 @@ https://musescore.com/bsg/scores/5658151
 (Scores customized with these plugins will play correctly in standard MuseScore 3, including the site).
 
 Link to official MuseScore Plugin Project page for this project: https://musescore.org/en/project/articulation-and-ornamentation-control
+
+Running "to be done/ideas" list here at https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/TBD.md .
