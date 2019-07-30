@@ -5,7 +5,7 @@ Working with Dale Larson, Matt McClintock, and Dmitrios95, we have effected chan
 
 The (long-intended) result of this is a trio of plugins hosted here, which allow customization of note attack and release, fraction of a note consumed by one or more appoggiature, and customized Baroque trills, on an individual note (or selection) basis, via straightforward, convenient GUI interface, removing the need to ever deal with the arcane and clumsy Piano Roll Editor or “hacked portati” or other articulations. Hopefully, with some exposure and design iteration, these will become “standard plugins”, although I would like to see this functionality in the core.
 
-They are provided here directly downloadable.  You must install them into the Plugins directory, and follow the normal directions to install plugins. Right now, these will not work with the Released MuseScore; they require a so-called MuseScore 3.3 “development build” for your OS at least as new as 14:00 UTC (10:00 EST) 30 July 2019 (visit https://musescore.org/en/download#Development-builds).  We anticipate the next release of MS will include the needed substrate.
+The plugins are provided here directly downloadable.  You must install them into the Plugins directory, and follow the normal directions to install plugins. Right now, these will not work with the Released MuseScore; they require a so-called MuseScore 3.3 “development build” for your OS at least as new as 14:00 UTC (10:00 EST) 30 July 2019 (visit https://musescore.org/en/download#Development-builds).  We fully anticipate the official 3.3 of MS will include these features.
 
 The plugins and their musical effects are:
 
