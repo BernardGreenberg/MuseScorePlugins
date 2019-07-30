@@ -10,3 +10,7 @@ Allow rational fractions like 1/16 to mean a sixteenth note, not 062.5 ‰.
 Buttons for favorite ‰'s on one or more plugins
 
 Upper-start trill option (odd count, no _Vorschag_).
+
+Pattern-driven (pairs, triplets, etc) articulation
+
+Possibly display all off-times in a range as tiny numbers. Big problem of how to undo.
