@@ -14,6 +14,7 @@
 
 import QtQuick 2.2
 import MuseScore 3.0
+import QtQuick.Dialogs 1.1
 
 MuseScore {
       version:  "3.0"
@@ -37,13 +38,19 @@ MuseScore {
 
       onRun: {
         console.log("hello red notes");
+        if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
+           versionError.open()
+           Qt.quit();
+	   return;
+        }
+
         var selection = curScore.selection;
         var elements = selection.elements;
         if (elements.length > 0) {  // We have a selection list to work with...
             console.log(elements.length, "selections")
             for (var idx = 0; idx < elements.length; idx++) {
                 var element = elements[idx]
-                console.log("element.type=" + element.type)
+                //console.log("element.type=" + element.type)
                 if (element.type == Element.NOTE) {
                     console.log("We found a note! Paint it red!.")
                     colorNote(element);
@@ -52,4 +59,15 @@ MuseScore {
         }
         Qt.quit();
       }
+
+      MessageDialog {
+        id: versionError
+        visible: false
+        title: qsTr("Unsupported MuseScore Version")
+        text: qsTr("This plugin needs MuseScore 3.3 or later")
+        onAccepted: {
+           Qt.quit()
+         }
+      }
+
 }
