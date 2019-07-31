@@ -23,7 +23,7 @@ The plugins and their musical effects are:
 
 Here are three posted scores, two serious, completely-rendered Bach movements, and a short less-serious demo.
 
-* [Demo of a Bach chorus with almost every note phrased, with text awareness (_Gute Nacht, o Wesen_)](https://musescore.com/bsg/gute_nacht_o_wesen)
+* [Demo of a Bach chorus with almost every note phrased, with text awareness (_Gute Nacht, o Wesen_, BWV 227#9)](https://musescore.com/bsg/gute_nacht_o_wesen)
 * [Demo of a very great Bach aria with solo parts fully phrased and customized *appoggiature* (_Erbarme dich_, StMP)](https://musescore.com/bsg/erbarme_dich)
 * [Demo of trill generator results](https://musescore.com/bsg/scores/5658151)
 
