@@ -27,6 +27,11 @@ Here are three posted scores, two serious, completely-rendered Bach movements, a
 * [Demo of a renowned Bach aria with all parts fully phrased and customized *appoggiature* (_Erbarme dich_, StMP)](https://musescore.com/bsg/erbarme_dich)
 * [Demo of trill generator results](https://musescore.com/bsg/scores/5658151)
 
+And as lagniappe I offer:
+
+* **rednote.qml** - For Music Teachers, or those like me, who "play one on TV". This tiny plugin allows you to, undoably, turn one note red.  Install it the usual way, and assign it a shortcut (I use ctrl-alt (Mac Cmd-Opt) R).  Click a note and strike the key.  You won't see the effect immediately because note selection will hide it, but if you have the Inspector open, you'll see its color pane turn embarrassingly red.  Mark parallel fifths, unprepared dissonances, or notes you particularly enjoy, screenshot, email, and await...
+
+
 (Scores customized with these plugins will play correctly in standard MuseScore 3, including the site).
 
 Link to official MuseScore Plugin Project page for this project: https://musescore.org/en/project/articulation-and-ornamentation-control
