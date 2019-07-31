@@ -29,7 +29,7 @@ Here are three posted scores, two serious, completely-rendered Bach movements, a
 
 And as lagniappe I offer:
 
-* **rednote.qml** - For nusic teachers, or those like myself, who "play one on TV". This tiny plugin allows you to, undoably, turn notes red.  Install it the usual way and assign it a shortcut (I use ctrl-alt (Mac Cmd-Opt) R).  Click a single note (or range-select and click "Notes") and strike the key.  You won't see the single-note effect immediately because note selection will hide it, but if you have the Inspector open, you'll see its color pane turn embarrassingly red, and when you click off it, its redness will be manifest.  Mark parallel fifths, unprepared dissonances, or notes you particularly enjoy, then screenshot, email, and just wait...
+* **rednote.qml** - For music teachers, or those like myself, who "play one on TV". This tiny plugin allows you to, undoably, turn notes red.  Install it the usual way and assign it a shortcut (I use ctrl-alt (Mac Cmd-Opt) R).  Click a single note (or range-select and click "Notes") and strike the key.  You won't see the single-note effect immediately because note selection will hide it, but if you have the Inspector open, you'll see its color pane turn embarrassingly red, and when you click off it, its redness will be manifest.  Mark parallel fifths, unprepared dissonances, or notes you particularly enjoy, then screenshot, email, and just wait...
 
 
 (Scores customized with these plugins will play correctly in standard MuseScore 3, including the site).
