@@ -21,11 +21,11 @@ The plugins and their musical effects are:
 
 * **triller.qml** - This facilitates imposition of a Baroque trill, always an even number of notes, any number of notes, on any note, discarding possible previous ornamentation. It does not “chase accidentals”, which is both a deficit and an advantage compared to built-in trills — you have to tell it whether upper and (if needed) lower neighbors are a half- or whole-tone away. You can add pre-strokes (*Vorschlag*) from above or below, as is common in Baroque music, and a Mordent at the end.*Vorschlag* creates four notes, mordent 2, and anything left in the number of notes you tell it (0 is OK) go into trilling. You can play with 6, 8, 10, 12, whatever you want, effects not possible without plugin help. The German terms are used (*oben* = above, *unten* = below) because most appropriate trill tables originated in Baroque now-Germany, and do so. It does not now insert ornament graphics (TBD).
 
-* [Demo of a Bach chorus with almost every note phrased, with text awareness:]
-https://musescore.com/bsg/gute_nacht_o_wesen
-* [Demo of a very great Bach aria with solo parts fully phrased and customized *appoggiature:*]
-https://musescore.com/bsg/erbarme_dic
-* [Demo of trill generator results: ]
+Demo of a Bach chorus with almost every note phrased, with text awareness:\
+https://musescore.com/bsg/gute_nacht_o_wesen \
+Demo of a very great Bach aria with solo parts fully phrased and customized *appoggiature:* \
+https://musescore.com/bsg/erbarme_dich \
+Demo of trill generator results: \
 https://musescore.com/bsg/scores/5658151
 
 (Scores customized with these plugins will play correctly in standard MuseScore 3, including the site).
