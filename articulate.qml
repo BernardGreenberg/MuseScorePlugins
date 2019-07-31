@@ -186,11 +186,11 @@ MuseScore {
             console.log("No region selection.")
             return false;
         }
+        cursor.rewind(1);
         var startStaff = cursor.staffIdx;
+        cursor.rewind(2)
         var endStaff = cursor.staffIdx;
         var endTick;
-        cursor.rewind(2);
-
         if (cursor.tick === 0) {
             // this happens when the selection includes
             // the last measure of the score.
@@ -201,7 +201,7 @@ MuseScore {
             endTick = cursor.tick;
         }
         
-        console.log("sel area staff info " + startStaff + " - " + endStaff + " - " + endTick)
+        console.log("sel area startStaff " + startStaff + "  endStaff  " + endStaff + " endTick " + endTick);
         for (var staff = startStaff; staff <= endStaff; staff++) {
             for (var voice = 0; voice < 4; voice++) {
                 cursor.rewind(1); // sets voice to 0
