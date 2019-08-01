@@ -248,6 +248,8 @@ MuseScore {
 	applyButton.visible = false;
 	showButton.visible = false;
 	undoButton.visible = true;
+	offTimeLabel.visible = false;
+	offTime.visible = false;
 	cancelButton.text = "Leave them";
 	curScore.startCmd();
 	applyToNotesInSelection(showTimeInScore);
@@ -296,6 +298,7 @@ MuseScore {
         }
 
         Label {
+	    id: offTimeLabel
             text:  "Off Time ‰"
         }
         TextField {
