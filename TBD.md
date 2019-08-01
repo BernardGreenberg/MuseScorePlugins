@@ -1,4 +1,4 @@
-Possible To-be-done's 9~strikeout~ means 'done')
+Possible To-be-done's (~strikeout~ means 'done')
 
 7/30/2019 \
 Locate correct trill graphics, and place them as staff text, removing any previous. \
