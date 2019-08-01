@@ -17,7 +17,8 @@ In the discussion below, I describe keystrokes in Windows terms; ctrl-alt X on W
 
 The plugins and their musical effects are:
 
-* **articulation.qml** — (most useful if a plugin shortcut key is defined; I use ctrl-alt T). Allows the setting of on-time and off-time (initially 0 and 1000) to any value, allowing literally a thousand degrees of detachment or smoothness, providing complete and easy effectuation of phrasing. Some of my favorite non-1000 off-times are 500 (staccato), 850, 900, 920, 960. On-time adjustment is mainly useful for simulating polyphonic violin bowing. Click on a note, type the shortcut, change the value(s), and click Apply or Cancel (or press Enter or ESC). If a region (blue box) is selected, you can impose an off-time on the whole passage (or staff or score as you select): this is also (non-obviously) useful to select simultaneous notes in _adjacent staves_ to phrase them identically, i.e., as a chord. All effects are undoable. The plugin can also be invoked simply to learn the on/off times of a note in a score (just dismiss it with ESC). 
+* **articulation.qml** — (most useful if a plugin shortcut key is defined; I use ctrl-alt T). Allows the setting of on-time and off-time (initially 0 and 1000) to any value, allowing literally a thousand degrees of detachment or smoothness, providing complete and easy effectuation of phrasing. Some of my favorite non-1000 off-times are 500 (staccato), 850, 900, 920, 960. On-time adjustment is mainly useful for simulating polyphonic violin bowing. Click on a note, type the shortcut, change the value(s), and click Apply or Cancel (or press Enter or ESC). If a region (blue box) is selected, you can impose an off-time on the whole passage (or staff or score as you select): this is also (non-obviously) useful to select simultaneous notes in _adjacent staves_ to phrase them identically, i.e., as a chord. All effects are undoable. The plugin can also be invoked simply to learn the on/off times of a note in a score (just dismiss it with ESC). \
+Version 3.1 supports annotating scores with on-time/off-time numbers. See CHANGES.md.
 
 * **appoggiatura.qml** — (again, assign a shortcut if you use it often enough, as in the aria below; I use Ctrl-Alt A). How much (what percent) of a note an appoggiatura should consume is contentious, even between historical and current performers and other experts, and is highly context-dependent. While MuseScore currently imposes fixed, procrustean answers, this plugin allows you to set the fraction for each individual occurrence to taste, including multiple and chordal *appoggiature*. Again, the plugin can be used to simply inspect the current appoggiatura fraction of so-decorated notes.
 
@@ -34,7 +35,7 @@ And as lagniappe I offer:
 * **rednote.qml** - For music teachers, or those like myself, who "play one on TV". This tiny plugin allows you to (undoably) turn notes red.  Install it the usual way and assign it a shortcut (I use ctrl-alt R).  Click a single note (or range-select and click "Notes") and strike the key.  You won't see the single-note effect immediately because note selection will hide it, but if you have the Inspector open, you'll see its color pane turn embarrassingly red, and when you click off it, its redness will be manifest.  Mark parallel fifths, unprepared dissonances, or notes you particularly enjoy, then screenshot, email, and just wait...
 
 
-(Scores customized with these plugins will play correctly in standard MuseScore 3, including the site).
+(Scores customized with these plugins will play correctly in standard MuseScore 3, including the site).]
 
 Link to official MuseScore Plugin Project page for this project: https://musescore.org/en/project/articulation-and-ornamentation-control
 
