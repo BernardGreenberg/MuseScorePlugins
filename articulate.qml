@@ -24,22 +24,18 @@ import QtQuick.Dialogs 1.1
    basis.  This allows you to phrase without the yellow bar jungle (which is
    always there for hard cases).  This even works on appoggiature, but does
    not work on notes with real "ornaments" (not well-defined how to edit).
-
    Extensions to impose duple- and triple- phrasing patterns are under
    consideration.
-
    If a nonempty region-selection exists when this invoked, all the notes in it
    will get the off-time you set; grace notes/appogg not affected.
-
    If there is no region selection but a single note has been clicked on,
    the pitch and on an off times are displayed and you can change the last two.
-
    Return and ESC are accepted as Apply and Cancel.
 */
 
 
 MuseScore {
-      version:  "3.1"
+      version:  "3.0"
       description: "This plugin adjusts the on/off times of a note."
       menuPath: "Plugins.Articulation"
 
@@ -51,7 +47,7 @@ MuseScore {
       property var the_note : null
 
       width:  240
-      height: 160
+      height: 120
 
       onRun: {
           if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
@@ -63,7 +59,7 @@ MuseScore {
           console.log("hello adjust articulation: onRun");
           curScore.createPlayEvents();
           var note_count = 0;
-          applyToNotesInSelection(function(note, cursor) { note_count += 1;});
+          applyToNotesInSelection(function(note) { note_count += 1;});
           console.log("sel note count", note_count);
           if (note_count > 0) {
               range_mode = true;
@@ -83,7 +79,6 @@ MuseScore {
             onTimeLabel.visible = false;
             pitchLabel.text = "Selection"
             offTime.text = "";
-	    showButton.visible = true;
         } else {
           if (the_note) {
               var events = the_note.playEvents;
@@ -93,7 +88,6 @@ MuseScore {
               var tpc = get_tpc_name(the_note.tpc1)
               var octave = get_octave(tpc, the_note.pitch)
               noteField.text = tpc + octave
-	      showButton.visible = false;
           }
         }
       }
@@ -153,7 +147,7 @@ MuseScore {
         }
         if (range_mode) {
             curScore.startCmd();
-            applyToNotesInSelection(function(note, cursor) {
+            applyToNotesInSelection(function(note) {
                 var mpe0 = note.playEvents[0];
                 mpe0.len = off_time - mpe0.ontime;
             });
@@ -216,7 +210,7 @@ MuseScore {
                         var notes = cursor.element.notes;
                         for (var k = 0; k < notes.length; k++) {
                             var note = notes[k];
-                            func(note, cursor);
+                            func(note);
                         }
                     }
                     cursor.next();
@@ -224,41 +218,6 @@ MuseScore {
             }
         }
          return true;
-    }
-
-    function showTimeInScore(note, cursor) {
-	var npe0 = note.playEvents[0];
-	var on_time = npe0.ontime;
-	var off_time = on_time + npe0.len;
-	if (on_time == 0 && off_time == 1000) {
-	    return;
-	}
-        var timeText = off_time + "&nbsp;";
-	if (on_time != 0) {
-	    timeText += "\n@" + on_time;
-	}
-        var staffText = newElement(Element.STAFF_TEXT);
-        staffText.text = timeText;
-	staffText.placement = Placement.BELOW
-	staffText.fontSize = 7;
-        cursor.add(staffText);
-    }
-
-    function showTimesInScore (){
-	applyButton.visible = false;
-	showButton.visible = false;
-	undoButton.visible = true;
-	offTimeLabel.visible = false;
-	offTime.visible = false;
-	cancelButton.text = "Leave them";
-	curScore.startCmd();
-	applyToNotesInSelection(showTimeInScore);
-	curScore.endCmd();
-    }
-
-    function undoTimes() {
-	cmd("undo")
-	Qt.quit()
     }
 
     function maybe_finish() {
@@ -298,7 +257,6 @@ MuseScore {
         }
 
         Label {
-	    id: offTimeLabel
             text:  "Off Time ‰"
         }
         TextField {
@@ -330,24 +288,7 @@ MuseScore {
                 Qt.quit();
             }
         }
- 
-        Button {
-	   id: showButton
-           text: "Show in score"
-           enabled: true
-           onClicked: {
-             showTimesInScore();
-           }
-         }
-        Button {
-             id: undoButton
-	     visible: false
-             text: "Undo show"
-	     onClicked: {
-		 undoTimes();
-	     }
-         }
- 
+
     }
 
  MessageDialog {
@@ -361,6 +302,7 @@ MuseScore {
          "the note, or one of the notes you have selected, have " +
          "multi-sub-note ornamentation."
      onAccepted: {
+         console.log("Messagedlg onaccepted");
          Qt.quit()
       }
    }
@@ -375,3 +317,4 @@ MuseScore {
          }
       }
 }
+
