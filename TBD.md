@@ -7,5 +7,5 @@ Allow rational fractions like 1/16 to mean a sixteenth note, not 062.5 ‰. \
 Buttons for favorite ‰'s on one or more plugins \
 Upper-start trill option (odd count, no _Vorschlag_). \
 Pattern-driven (pairs, triplets, etc) articulation \
-Display all off-times in a range as tiny numbers in the score. Big problem of how/when to undo. \
-Maybe a "locking" button to show them, which locks up the UI until they're gone.
+~Display all off-times in a range as tiny numbers in the score. Big problem of how/when to undo.~ \
+~Maybe a "locking" button to show them, which locks up the UI until they're gone.~
