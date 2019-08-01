@@ -245,20 +245,18 @@ MuseScore {
     }
 
     function showTimesInScore (){
-	applyButton.enabled = false;
+	applyButton.visible = false;
 	showButton.visible = false;
 	undoButton.visible = true;
+	cancelButton.text = "Leave them";
 	curScore.startCmd();
 	applyToNotesInSelection(showTimeInScore);
 	curScore.endCmd();
     }
 
     function undoTimes() {
-	showButton.visible = true;
-	undoButton.visible = false;
-	applyButton.enabled = true;
-
 	cmd("undo")
+	Qt.quit()
     }
 
     function maybe_finish() {
