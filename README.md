@@ -1,7 +1,7 @@
 # MuseScorePlugins
 My QML Plugins for the MuseScore application
 
-Working with Dale Larson, Matt McClintock, and Dmitrios95, we have effected changes to MuseScore that I have wanted for a long time, to wit, the ability to customize note and appoggiatura attack and release parameters from plugins.
+Working with Dale Larson, Matt McClintock, and Dmitrio95, we have effected changes to MuseScore that I have wanted for a long time, to wit, the ability to customize note and appoggiatura attack and release parameters from plugins.
 
 The (long-intended) result of this is a trio of plugins hosted here, which allow customization of note attack and release, fraction of a note consumed by one or more appoggiature, and customized Baroque trills, on an individual note (or selection) basis, via straightforward, convenient GUI interface, removing the need to ever deal with the arcane and cumbersome Piano Roll Editor or “hacked *portati*” or other articulations. Hopefully, with some exposure and design iteration, these will become “standard plugins”, although I would like to see this functionality in the core.
 
