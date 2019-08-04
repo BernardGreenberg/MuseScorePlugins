@@ -8,7 +8,7 @@ The nature of electromagnetism is such that if you were to cut a bar magnet in h
 
 What? Three-quarters of the note, not half of it? What's going on?  Go back to the main window, and use the articulate plugin to look at the off-times of both notes.  You will see that the **first** one shows 500 and the second, 1000, the opposite of what you hear, and not what you expected anyway!   The piano roll editor, acting for MuseScore, has stored the articulation parameters for the tied chain, it fact, the second note, in the first!
 
-Well, if that's what it wants to do, fair enough. But then remove the tie, and play.  The first note will play back cut to 500, and the second will play full!  How about that?
+Well, if that's what it wants to do, fair enough. But then remove the tie, and play.  The first note will play back cut to 500, and the second will play full!  How about that? The magnetic monopole!
 
 Now try another experiment.  Make two more adjacent quarter notes, not tied, of the same pitch, and in the piano roll editor, cut back the second one.  Play it, and it will, of course, play as expected. Now go back to the main window and tie them.  And it plays as expected again, with the second cut back. Much better?
 
