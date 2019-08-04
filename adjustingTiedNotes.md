@@ -18,7 +18,7 @@ Now try another experiment.  Make two more adjacent quarter notes, not tied, of 
 
 So where do the articulation parameters belong for a tied note? MuseScore isn't really sure, because it seems to be prepared for your doing the second experiment, putting them on the last note, which produces the "right" answer.  But putting them in the first note works, too, until you untie the notes (and if you call truncating the final note when you asked to edit the first note "working"), and the one the PRE respects.  MuseScore seems to handle either model, and can't ever stop handling either model, lest scores with articulations on final notes of tied groups (of which I have authored many over the years) to play properly.
 
-MuseScore does not handle this consistently, and supports enough variability in extant scores that it may never.
+MuseScore does not handle this consistently, and supports enough variability in extant scores that it may never.  Perhaps MuseScore is anticipating your untieing the notes in the future, in which eventuality, *in either case*, what is visually apparent in the score will become the fact in sound.  Although the MS synthesizer does, the PRE does not recognize or understand articulation control of tie chains on  than the first note, a bug, as far as I can tell.
 
 So, when using the **articulate** plugin, to which part of a tied note should it be applied?  My practice has been "it depends upon how it ends", i.e., if the ending of the tied note is a suspension that has to end simultaneously with another voice, I set the articulation parameters on the last note, as here.  This has the advantage of letting you select both notes at once and set the off-time in a "multiple" operation.
 
