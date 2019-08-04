@@ -2,7 +2,7 @@
 
 BSG 3 Aug 2019
 
-MuseScore's representation of the articulation parameters (on-time, off-time) for tied notes is currently very ... "surprising", in a way you have to know about if you wish to set the articulation parameters of such notes.  It may improve in the future in such a way that will allow these plugins to be able to act in a more consistent fashion.
+MuseScore's representation of the articulation parameters (on-time, off-time) for tied notes is currently very ... "surprising", in a way you have to know about if you wish to set the articulation parameters of such notes.  It may improve in the future in such a way that will allow these plugins to act in a more consistent fashion.
 
 The nature of electromagnetism is such that if you were to cut a bar magnet in half, you do **not** get two "magnetic monopoles", a North one and a South one, but two bipolar magnets, a most unexpected result absent study of electromagnetism.  The same is true here.  Let us produce a little bar magnet: Set quarter-note = 40 and turn on the metronome. Enter two quarter-notes, tie them, and then enter the Piano Roll Editor (from the right click menu on the blue-boxed measure).  Then click on the yellow bar for that note, and reduce the length you see from 1000 to 500, and play it back.
 
