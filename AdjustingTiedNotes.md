@@ -18,6 +18,10 @@ MuseScore does not handle this consistently, and supports enough variability in 
 
 So, when using the articulation plugin, to which part of a tied note should it be applied?  My practice has been "it depends upon how it ends", i.e., if the ending of the tied note is a suspension that has to end simultaneously with another voice, I set the articulation parameters on the last note, as here.  This has the advantage of letting you select both notes at once and set the off-time in a "multiple" operation.
 
-If the tie is just a rhythmic notation within a measure, as here, I click on the first note.  The effect, in either case, is **identical**, i.e., to apply the changes to the *last* note.
+![BWV 227.9 excerpt](227suspx1.png)
+
+If the tie is just a rhythmic notation within a measure, as here, I click on and change the first note.  The effect, in either case, is **identical**, i.e., to apply the changes to the *last* note, no matter in which they are "stored."
+
+![Rhythmic tieing](tieartic2.png)
 
 
