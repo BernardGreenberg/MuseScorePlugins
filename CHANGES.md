@@ -1,6 +1,6 @@
 * **4 Aug 2019**
 
-Added ![adjust tied notes](adjustTiedNotes.md) describing issues with MuseScore representation of tied notes, issues that users need understand.
+Added ![adjustTiedNotes.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/adjustingTiedNotes.md) describing issues with MuseScore representation of tied notes, issues that users need understand.
 
 * **1 Aug 2019**
 
