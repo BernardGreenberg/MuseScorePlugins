@@ -14,7 +14,7 @@ What? *Three-quarters of the note*, not half of it? What's going on?  Use the **
 
 If you now *untie* the two notes, forthwith the *first note* will obey the *staccato* you gave it, and the second will spring back to full value!  A split bar magnet!
 
-Now try another experiment.  Make two more adjacent quarter notes, not tied, of the same pitch, and add *staccato* to the *second* one. Play it, and it will, of course, play as expected. If you view it in the PRE, however, you will not even see the change -- this is a bug. But it plays as expected again, with the second cut back. The magnetic monopole!
+Now try another experiment.  Make two more adjacent quarter notes, not tied, of the same pitch, and add *staccato* to the *second* one. Play it, and it will, of course, play as expected. If you view it in the PRE, however, you will not even see the change -- this is a bug. But it plays as expected again, with the second cut back. But if you use the **articulate** plugin, you will see the adjusted parameters still there on the second note. The magnetic monopole!
 
 So where do the articulation parameters belong for a tied note? MuseScore isn't really sure, because it seems to be prepared for your doing either, putting them on the last note or the first note produces the "right" answer.  MuseScore seems to handle either model, and can't ever stop doing so, lest scores with articulations on final notes of tied groups (of which I have authored many over the years) fail to play properly.
 
