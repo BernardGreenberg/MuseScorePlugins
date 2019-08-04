@@ -1,3 +1,7 @@
+* **4 Aug 2019**
+
+Added ![adjust tied notes](adjustTiedNotes.md) describing issues with MuseScore representation of tied notes, issues that users need understand.
+
 * **1 Aug 2019**
 
 * **articulate.qml 3.2** fixes a bug in 3.1 that would create an unreadable score if you stored the annotations into it, say, if you were perhaps writing a phrasing tutorial .... 
