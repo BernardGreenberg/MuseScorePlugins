@@ -10,6 +10,8 @@ The nature of electromagnetism is such that if you were to break a bar magnet in
 
 What? *Three-quarters of the note*, not half of it? What's going on?  Use the **articulate** plugin, not the PRE, to look at the off-times of both notes.  You will see that the **first** one shows 500 and the second, 1000, the opposite of what you hear, and not what you expected anyway! Had you used the PRE to adjust the off-time of the *entire note*, you will see that it won't really do what you asked, but will adjust, visually, and set up to play the *second* note shortened, while (falsely) claiming that it applied the adjustment to the *entire note*.
 
+![adjustment displacement example](staccatoAnomaly.png)
+
 If you now *untie* the two notes, forthwith the *first note* will obey the *staccato* you gave it, and the second will spring back to full value!  A split bar magnet!
 
 Now try another experiment.  Make two more adjacent quarter notes, not tied, of the same pitch, and add *staccato* to the *second* one. Play it, and it will, of course, play as expected. If you view it in the PRE, however, you will not even see the change -- this is a bug. But it plays as expected again, with the second cut back. The magnetic monopole! Much better?
