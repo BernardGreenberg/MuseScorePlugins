@@ -2,7 +2,7 @@
 
 BSG 3 Aug 2019
 
-MuseScore's representation of the articulation parameters (on-time, off-time) for tied notes is currently obscure in a way you must understand if you wish to set the articulation parameters of tied notes.  The situation may improve in the future in such a way that will allow these plugins to act in a more consistent fashion.
+MuseScore's representation of the articulation parameters (on-time, off-time) for tied notes is currently obscure in a way you must understand if you wish to adjust the same.  The situation may improve in the future in such a way that will allow these plugins to act in a more consistent fashion.
 
 For this explanation, we will use the MuseScore *staccato* dot, which can be applied to a note by typing Shift-S, as a means of applying "off-time 500" to a note accurately.  That is exactly what it does, as can be verified in the Piano Roll Editor (PRE).
 
