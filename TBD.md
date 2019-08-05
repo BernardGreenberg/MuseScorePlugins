@@ -9,3 +9,9 @@ Lower-start trill option (odd count, no _Vorschlag_). \
 Pattern-driven (pairs, triplets, etc) articulation \
 ~Display all off-times in a range as tiny numbers in the score. Big problem of how/when to undo.~ \
 ~Maybe a "locking" button to show them, which locks up the UI until they're gone.~
+
+8/4/2019 \
+"First" , "Last" radio buttons appear, pre-set, when member of tie chain clicked on (articulate) \
+that would require "help" button!
+triller - offer option of nonlinear acceleration as in TempoChange plugin \
+triller - offer option of 0-n "trailer pieces" on home note, i.e., *Praller* \
