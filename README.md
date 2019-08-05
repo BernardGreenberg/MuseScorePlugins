@@ -25,7 +25,7 @@ Version 3.1 supports annotating scores with on-time/off-time numbers. See [CHANG
 
 * **triller.qml** - This facilitates construction of a Baroque trill, always an even number of notes, any number of notes, on any note, discarding possible previous ornamentation. It does not “chase accidentals”, which is both a deficit and an advantage compared to built-in trills — you have to tell it whether upper and (if needed) lower neighbors are a half- or whole-tone away. You can add a pre-stroke (*Vorschlag*) from above or below, as is common in Baroque music, and a mordent at the end. *Vorschlag* creates four notes, mordent 2, and anything remaining in the number of notes you tell it (0 remaining is OK) goes into trilling. You can experiment with 6, 8, 10, 12, or whatever you want, effects not possible without plugin help. The German terms are used (*oben* = above, *unten* = below) because most appropriate trill tables originated in Baroque now-Germany, and do so. The non-_Vorschlag_ portion (body) of a trill always starts from the upper note. The plugin does not now insert score graphics (TBD).
 
-Here are four posted scores, two serious, completely-rendered Bach movements, and a short less-serious demo.
+Here are four posted scores, two serious, completely-rendered Bach movements, and a two short demos.
 
 * [Demo of a Bach chorus with almost every note phrased, with text awareness (_Gute Nacht, o Wesen_, BWV 227#9)](https://musescore.com/bsg/gute_nacht_o_wesen)
 * [Demo of a renowned Bach aria with all parts fully phrased and customized *appoggiature* (_Erbarme dich_, StMP)](https://musescore.com/bsg/erbarme_dich)
