@@ -12,6 +12,6 @@ Pattern-driven (pairs, triplets, etc) articulation \
 
 8/4/2019 \
 "First" , "Last" radio buttons appear, pre-set, when member of tie chain clicked on (articulate) \
-that would require "help" button!
+that would require "help" button! \
 triller - offer option of nonlinear acceleration as in TempoChange plugin \
 triller - offer option of 0-n "trailer pieces" on home note, i.e., *Praller* \
