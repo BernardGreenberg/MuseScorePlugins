@@ -17,4 +17,7 @@ triller - offer option of nonlinear acceleration as in TempoChange plugin \
 triller - offer option of 0-n "trailer pieces" on home note, i.e., *Praller*
 
 8/30/2019 \
-Initialize trill plugin beat-count with #of noteEvents currently there.
+Initialize trill plugin beat-count with #of noteEvents currently there
+
+8/31/2019 \
+Appogg - don't disqualify because of main note overlap - detect and report and allow editing it.
