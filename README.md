@@ -7,7 +7,7 @@ The (long-intended) result of this is a trio of plugins hosted here, which allow
 
 The plugins provided here are directly downloadable.  You must install them into the Plugins directory, and follow the normal directions to install plugins (https://musescore.org/en/handbook/3/plugins). 
 
-Note that **these plugins require MuseScore 3.3**: they will not work with the Released MuseScore 3.2. MuseScore 3.3 is now only available as a “development build” for your OS, and you need one at least as new as 14:00 UTC (10:00 EST) 30 July 2019 (visit https://musescore.org/en/download#Development-builds).  We fully anticipate the official 3.3 betas and release of MS will include these features.
+Note that **these plugins require MuseScore 3.3**: they will not work with the Released MuseScore 3.2 (let alone MuseScore 2). MuseScore 3.3 is now available as Beta software at https://musescore.org/en/3.3beta ; it includes the necessary features for these plugins. Full release of 3.3 is anticipated later this month (September, 2019).
 
 In MuseScore, a note's _on-time_ and _off-time_ are, respectively, the delay of its onset and the time of its release as actually performed as opposed to its notated position and time-value (i.e., quarter (crochet), eighth (quaver), etc.). The note's notated value is measured in _per mille_, ‰, like percent, but in thousandths instead of hundredths. If a note starts exactly when notated, its on-time is 0.  If a note ends exactly when notated, its off-time is 1000.  The MuseScore *staccato* accent, for example, changes off-time to 500 (i.e. reduces the note to half its indicated length).  All of these plugins, therefore, deal in time as *per mille* (1000ths).
 
