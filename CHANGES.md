@@ -4,7 +4,7 @@
 \
 But with experience and skill, and varying criteria for different instruments and sound fonts, you can use negative values (try -40, -50, whatever else suits you) to simulate enhanced legato between the appoggiature and the main note, when desirable.  The effect is subtle, audible, and very pleasing for voices and string instruments.
 
-![Appoggiatura plugin with separation](AppogWSep.png)
+![Appoggiatura plugin with separation](AppoggWSep.png)
 
 
 * **4 Aug 2019**
