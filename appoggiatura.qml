@@ -10,6 +10,8 @@
 //  it under the terms of the GNU General Public License version 2
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
+//
+//  Version 3.1 BSG    3 Sept 2019 -- separation and rename "per mille" to "main note start"
 //=============================================================================
 
 import QtQuick 2.2
@@ -32,6 +34,11 @@ Play the measure to hear the effect.  Change is undoable. Return and ESC are rec
 It can deal with parallel appoggiatura chords (Bach, "Buß und Reu" StMP). It adjust all "grace"
 and main notes.
 
+"Separation" is the per mille between the end of the appoggiature and the start of the main note.
+This is created as 0 by MuseScore and should be left that way in almost all cases. Positive
+separation is not very useful, but with negative separation you can create overlap, which
+can create a profound legato effect if used tastefully.
+
 This capability really ought be in the MS inspector, but this is a good work-around if that is too
 controversial.
 
@@ -39,7 +46,7 @@ TBD: Recognize and handle unrealized appoggiature
 */
 
 MuseScore {
-      version:  "3.0"
+      version:  "3.1"
       description: "This plugin adjusts the duration of an appoggiatura."
       menuPath: "Plugins.Appoggiatura"
 
@@ -61,15 +68,15 @@ MuseScore {
            }
           console.log("hello adjust appoggiatura: onRun");
           curScore.createPlayEvents();  // Needed to get MS to realize the appogg 1st time
-          var note = find_usable_note();
-          if (note) {
-              the_note = note;
-              perMille.text = sum_graces(note) + ""
+          var note_info = find_usable_note();
+          if (note_info) {
+              the_note = note_info.note;
+              mainNoteStart.text = note_info.main_start + "";
+	      separation.text = note_info.separation + "";
           } else {
               console.log("onRun didn't find a usable appogg")
               complaintDialog.open()
               Qt.quit();
-	      return;
           }
       }
 
@@ -88,10 +95,11 @@ MuseScore {
                         var mnplayevs = note.playEvents;
                         var mpe0 = mnplayevs[0];
                         dump_play_ev(mpe0);
-                        var fuzz = Math.abs(mpe0.ontime - summa_gratiarum);
-                        if (fuzz < 4) {
-                            return note;
-                        }
+			return {
+			    note: note,
+			    main_start: mpe0.ontime,
+			    separation: mpe0.ontime - summa_gratiarum,
+			}
                     }
                 }
             }
@@ -132,10 +140,15 @@ MuseScore {
             //console.log("No note at apply time.")
             return false;
         }
-        var new_transit = parseInt(perMille.text);
-        if (isNaN(new_transit)) {
+        var new_transit = parseInt(mainNoteStart.text);
+        if (isNaN(new_transit) || new_transit < 0) {
             return false;
         }
+	var new_separation = parseInt(separation.text);
+	if (isNaN(new_separation)) {  //could be pappadum
+	    return false;
+	}
+	
         //console.log("Begin apply pass, new transit=", new_transit);
 
         var mpe0 = note.playEvents[0];
@@ -144,7 +157,18 @@ MuseScore {
         var grace_chords = note.parent.graceNotes; //really
         //console.log("Apply pass grace_chords", grace_chords);
         var ngrace = grace_chords.length;  //chords, really
-        var new_grace_len = Math.floor(new_transit/ngrace);
+	var new_grace_end = new_transit - new_separation; // negative means more +
+        var new_grace_len = Math.floor(new_grace_end/ngrace);
+
+	// Compute values and check validity first.
+        var main_off_time = mpe0.ontime + mpe0.len;   //doesn't change
+        var new_main_on_time = new_transit; //attendite et videte
+        var new_main_len = main_off_time - new_main_on_time;  // old len
+
+	if (new_main_len <= 0 || new_grace_len <= 0) {
+	    console.log("Values produce negative main or grace length.");
+	    return false;
+	}
 
         curScore.startCmd();
         var current = 0;
@@ -158,16 +182,15 @@ MuseScore {
             }
             current += new_grace_len;
         }
-        var main_on_time = current;
-        var main_off_time = mpe0.ontime + mpe0.len;
-        var main_len = main_off_time - main_on_time;
+
+
         var notachord = note.parent;
         var chord_notes = notachord.notes;
         for (var k = 0; k < chord_notes.length; k++) {
             var cnote = chord_notes[k];
             var mpce0 = cnote.playEvents[0];
-            mpce0.ontime = main_on_time;
-            mpce0.len = main_len;
+            mpce0.ontime = new_main_on_time;
+            mpce0.len = new_main_len;
         }
         curScore.endCmd()
         console.log("Did it!", current);
@@ -185,7 +208,7 @@ MuseScore {
             //console.log("No sum of graces at getCurrent time.")
             return false;
         }
-        perMille.text = summa + ""
+        mainNoteStart.text = summa + ""
         return true;
     }
    
@@ -202,13 +225,28 @@ MuseScore {
         columns: 2
 
         Label {
-            text:  "Per Mille"
+            text:  "Main note start ‰"
         }
         TextField {
-            id: perMille
+            id: mainNoteStart
             implicitHeight: 24
             placeholderText: "/1000"
             focus: true
+            Keys.onEscapePressed : {
+                Qt.quit()
+            }
+            Keys.onReturnPressed : {
+                maybe_finish();
+            }
+        }
+	Label {
+            text:  "Separation ‰"
+        }
+        TextField {
+            id: separation
+            implicitHeight: 24
+            placeholderText: "0"
+            focus: false
             Keys.onEscapePressed : {
                 Qt.quit()
             }
