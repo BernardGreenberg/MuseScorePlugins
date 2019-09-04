@@ -1,8 +1,8 @@
 * **3 Sept 2019**
 
-* **appoggiatura.qml** version 3.1 introduces the ability to specify nonzero separation (or overlap) between the end of the appoggiatura (or appoggiature) and the start of the main note. This had previously been constrained to be zero, which is how it is created by MuseScore.  The first text field has been renamed from *perMille* to *Main note start ‰*.  The second text field, *Separation*, is the positive separation between the end of the appoggiatura(e) and the start of the main note.  In almost all cases, leave it as zero. \
+* **appoggiatura.qml** version 3.1 introduces the ability to specify nonzero separation (or overlap) between the end of the appoggiatura (or *appoggiature*) and the start of the main note. This had previously been constrained to be zero, which is how it is created by MuseScore.  The first text field has been renamed from *perMille* to *Main note start ‰*.  The second text field, *Separation*, is the positive separation between the end of the *appoggiatura(e)* and the start of the main note.  In almost all cases, leave it as zero. \
 \
-But with experience and skill, and varying criteria for different instruments and sound fonts, you can use negative values (try -40, -50, whatever else suits you) to simulate enhanced legato between the appoggiature and the main note, when desirable.  The effect is subtle, audible, and very pleasing for voices and string instruments.
+But with experience and skill, and varying criteria for different instruments and sound fonts, you can use negative values (try -20, -40, -50, whatever pleases you in each case) to simulate enhanced legato between the *appoggiature* and the main note, when desirable.  The effect is subtle, audible, and very pleasing for voices and string instruments.
 
 ![Appoggiatura plugin with separation](AppoggWSep.png)
 
