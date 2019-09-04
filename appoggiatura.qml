@@ -197,21 +197,6 @@ MuseScore {
         return true;    
     }   
 
-    function getCurrent() {
-        var note = find_usable_note(false);
-        if (!note) {
-            //console.log("No note at getCurrent time.")
-            return false;
-        }
-        var summa = sum_graces(note);
-        if (!summa) {
-            //console.log("No sum of graces at getCurrent time.")
-            return false;
-        }
-        mainNoteStart.text = summa + ""
-        return true;
-    }
-   
     function maybe_finish() {
         if (applyChanges()) {
             Qt.quit();
