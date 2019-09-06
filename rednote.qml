@@ -10,6 +10,8 @@
 //  it under the terms of the GNU General Public License version 2
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
+//
+//  3.1 6 Sept 2019 -- moved out of submenu to attempt to address selection prob.
 //=============================================================================
 
 import QtQuick 2.2
@@ -17,9 +19,9 @@ import MuseScore 3.0
 import QtQuick.Dialogs 1.1
 
 MuseScore {
-      version:  "3.0"
+      version:  "3.1"
       description: qsTr("This plugin colors the selected note(s) red.")
-      menuPath: "Plugins.Notes.Red Note"
+      menuPath: "Plugins.Red Note"
 
       property string red   : "#ff0000"
 
