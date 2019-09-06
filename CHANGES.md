@@ -1,3 +1,7 @@
+* **6 Sept 2019**
+
+* **rednote.qml** version 3.1 moves the plugin from the "Notes" sub-menu to the top-level menu.  There seems to be a bug in Qt/MS such that plugins and other than the top level, activated by shortcuts, sometimes fail to be activate from those shortcuts, and the problem is mysteriously "solved" by switching away from the MuseScore app and switching back and issuing the shortcut again.  Albeit mysterious, this improves the plugin's reliability.
+
 * **3 Sept 2019**
 
 * **appoggiatura.qml** version 3.1 introduces the ability to specify nonzero separation (or overlap) between the end of the appoggiatura (or *appoggiature*) and the start of the main note. This had previously been constrained to be zero, which is how it is created by MuseScore.  The first text field has been renamed from *perMille* to *Main note start ‰*.  The second text field, *Separation ‰*, is the positive separation between the end of the *appoggiatura(e)* and the start of the main note.  In almost all cases, leave it as zero. \
