@@ -24,4 +24,4 @@ Initialize trill plugin beat-count with #of noteEvents currently there
 
 9/28/2019 \
 triller - try to infer parameters from extant ornamentation on note. \
-appoggiatura  - (suggestion, not really feasible in current UX) - work with disperesed selection of many.
+appoggiatura  - (suggestion, not really feasible in current UX) - work with dispersed selection of many.
