@@ -23,5 +23,5 @@ Initialize trill plugin beat-count with #of noteEvents currently there
 ~Appogg - don't disqualify because of main note overlap - detect and report and allow editing it.~ 3.1 \T
 
 9/28/2019 \
-triller - try to infer parameters from extant ornamentation on note.
+triller - try to infer parameters from extant ornamentation on note. \
 appoggiatura  - (suggestion, not really feasible in current UX) - work with disperesed selection of many.
