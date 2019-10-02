@@ -1,3 +1,6 @@
+* **2 Oct 2019**
+* **DockArticulate.qml** version 3.3 is a new, additional, plugin which implements the functionality of **articulate.qml** as a "dock plugin", that is, constantly visible (if wanted) and responding to user selection of notes and ranges automatically.  This allows viewing of note articulation parameters without any user action at all, and editing in a way almost identical to that in the inspector.  See ![DockArticulate.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/DockArticulate.md).
+
 * **6 Sept 2019**
 
 * **rednote.qml** version 3.1 moves the plugin from the "Notes" sub-menu of "Plugins" to the latter's top-level.  There seems to be a bug in Qt/MS such that plugins at other than the top level, activated by shortcuts, sometimes fail to be activated from those shortcuts, and the problem is mysteriously "solved" by switching away from the MuseScore app and switching back and issuing the shortcut again.  Although the problem's root remains mysterious, this change improves the plugin's reliability.
