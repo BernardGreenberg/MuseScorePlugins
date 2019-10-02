@@ -21,7 +21,7 @@ The plugins and their musical effects are:
 \
 Version 3.1 supports annotating scores with on-time/off-time numbers. See [CHANGES.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/CHANGES.md). \
 \
-(2 Oct 2019) There is a new version, [DockArticulate.qml](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/DockArticulate.qml) which provides the same functionality as an always-visible "dock plugin", which is considerably more convenient.  See [DockArticulate.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/DockArticulate.md).
+(2 Oct 2019) There is a new version, [DockArticulate.qml](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/DockArticulate.qml), which provides the same functionality as an always-visible "dock plugin", which is considerably more convenient.  See [DockArticulate.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/DockArticulate.md).
 
 * **appoggiatura.qml** — (again, assign a shortcut if you use it often enough, as in the aria below; I use Ctrl-Alt A). How much (what percent) of a note an appoggiatura should consume is contentious, even between historical and current performers and other experts, and is highly context-dependent. While MuseScore currently imposes fixed, procrustean answers, this plugin allows you to set the fraction for each individual occurrence to taste, including multiple and chordal *appoggiature*. Again, the plugin can be used to simply inspect the current appoggiatura fraction of so-decorated notes.  The plugin can now (v. 3.1) create overlap between *appoggiature* and the main note.  See [CHANGES.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/CHANGES.md).
 
