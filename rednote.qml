@@ -11,7 +11,8 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //
-//  3.1 6 Sept 2019 -- moved out of submenu to attempt to address selection prob.
+//  3.1   6 Sept 2019 -- moved out of submenu to attempt to address selection prob.
+//  3.2   3 Oct 2019 -- don't call Qt.Quit, closes dock plugins.
 //=============================================================================
 
 import QtQuick 2.2
@@ -19,7 +20,7 @@ import MuseScore 3.0
 import QtQuick.Dialogs 1.1
 
 MuseScore {
-      version:  "3.1"
+      version:  "3.2"
       description: qsTr("This plugin colors the selected note(s) red.")
       menuPath: "Plugins.Red Note"
 
@@ -59,7 +60,6 @@ MuseScore {
                 }
             }
         }
-        Qt.quit();
       }
 
       MessageDialog {
