@@ -63,16 +63,20 @@ MuseScore {
       property var the_note : null
       property var stop_recurse : false;
       property var nnflag : "not-note"
+      property var display_up : false
 
       width:  240
       height: 160
 
-     onScoreStateChanged: {
-         if (stop_recurse)
+    onScoreStateChanged: {
+        if (stop_recurse)
             return;
-         if (state.selectionChanged) {
-             get_notes()
-         }
+        if (state.selectionChanged) {
+            get_notes()
+        }
+	else if (display_up) {
+	    clear_all();
+	}
      }
 
       onRun: {
@@ -89,9 +93,11 @@ MuseScore {
 	  pitchLabel.text = "";
 	  pitchField.visible = true;
 	  pitchField.text = "Select notes";
+	  display_up = false;
       }
 
     function get_notes() {
+	the_note = false;
         var note_count = 0;
 	undoButton.visible = false;
         
@@ -121,6 +127,7 @@ MuseScore {
 	    pitchField.visible = true;
             offTime.text = "";
             showButton.visible = true;
+	    display_up = true;
 	    
         } else if (the_note) {
             var events = the_note.playEvents;
@@ -141,6 +148,7 @@ MuseScore {
             var octave = get_octave(tpc, the_note.pitch)
 	    pitchLabel.text = "Pitch";
             pitchField.text = tpc + octave
+	    display_up = true;
 
         } else {
 	    clear_all();
@@ -155,6 +163,7 @@ MuseScore {
         onTimeLabel.visible = offTimeLabel.visible = false;
         showButton.visible = false;
 	the_note = false;
+	display_up = false;
     }	
 
     function get_tpc_name(tpc){
