@@ -10,6 +10,8 @@
 //  it under the terms of the GNU General Public License version 2
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
+//
+//  3.4 - 4 Oct 19 - clear_all if click on non-note.
 //=============================================================================
 
 import QtQuick 2.2
@@ -47,7 +49,7 @@ import QtQuick.Dialogs 1.1
 
 
 MuseScore {
-      version:  "3.3"
+      version:  "3.4"
       description: "This plugin adjusts the on/off times of a note."
       menuPath: "Plugins.DockArticulate"
 
@@ -82,7 +84,7 @@ MuseScore {
 
           console.log("adjust articulation docking plugin: onRun");
           stop_recurse = false;
-         // curScore.createPlayEvents();
+         // curScore.createPlayEvents();  // pointless for dock plugin.
 	  clear_all();
 	  pitchLabel.text = "";
 	  pitchField.visible = true;
@@ -90,11 +92,12 @@ MuseScore {
       }
 
     function get_notes() {
-          var note_count = 0;
-	  undoButton.visible = false;
+        var note_count = 0;
+	undoButton.visible = false;
         
 	var val = find_usable_note();
 	if (val == nnflag) {
+	    clear_all();
 	    return;
 	}
 	the_note = val;
@@ -103,7 +106,7 @@ MuseScore {
 	    note_count = 0;
             applyToNotesInSelection(function(note, cursor) { note_count += 1;});
             if (note_count > 0)
-              range_mode = true;
+		range_mode = true;
         }
 
         if (range_mode) {
@@ -151,6 +154,7 @@ MuseScore {
         pitchLabel.visible = pitchField.visible = false;
         onTimeLabel.visible = offTimeLabel.visible = false;
         showButton.visible = false;
+	the_note = false;
     }	
 
     function get_tpc_name(tpc){
@@ -202,11 +206,19 @@ MuseScore {
        console.log("on time", event.ontime, "len", event.len, "off time", event.ontime+event.len);
    }
 
+    function is_num(val) {
+	return /^\d+$/.test(val);
+    }
+
     function applyChanges() {
-        var off_time = parseInt(offTime.text)
-        if (isNaN(off_time)) {
+
+        if (!is_num(offTime.text)) {
+	    //Doesn't work -- input boxes can't receive input
+	    //until score is focused first, unclear why, so comment out.
+	    inputError.open();
             return false;
         }
+        var off_time = parseInt(offTime.text)
         if (range_mode) {
 	    stop_recurse = true;
             curScore.startCmd();
@@ -223,10 +235,11 @@ MuseScore {
             console.log("No note at Apply time.")
             return false;
         }
-        var on_time = parseInt(onTime.text)
-        if (isNaN(on_time)) {
+        if (!is_num(onTime.text)) {
+//	    inputError.open();
             return false;
         }
+        var on_time = parseInt(onTime.text)
         stop_recurse = true;
         curScore.startCmd();
         var mpe0 = note.playEvents[0];
@@ -245,7 +258,7 @@ MuseScore {
         var cursor = curScore.newCursor();
         cursor.rewind(1);
 
-                var endStaff;
+        var endStaff;
         if (!cursor.segment) { // no selection
             return;
         }
@@ -406,13 +419,25 @@ MuseScore {
     }
 
 
- MessageDialog {
+
+    MessageDialog {
+	id: inputError
+	visible: false
+	title: "Numeric input error"
+	text: "On or off time not a number or out of range."
+	onAccepted: {
+	    close();
+	    get_notes()
+	}
+    }
+
+   MessageDialog {
       id: versionError
       visible: false
       title: qsTr("Unsupported MuseScore Version")
       text: qsTr("This plugin needs MuseScore 3.3 or later")
       onAccepted: {
          Qt.quit()
-         }
       }
+   }
 }
