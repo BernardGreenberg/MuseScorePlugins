@@ -12,6 +12,6 @@ The "Show in score" functionality is slightly different.  The **Show in score** 
 
 This plugin does not (yet) replace the older one, whose usage model you might still prefer.  I'll try to maintain them in parallel; there is no convenient way to share code in this paradigm.
 
-Note that the use of any other plugin, in particular "dialog"-type plugins such as **appoggiatura.qml** or **TempoChange**, will cause **DockArticulate** to close its panel when the other plugin closes.  This is currently (3 Oct 2019) a design problem in Qt/MuseScore, and is true of any dock-type plugin.
+Note that the use of any other plugin, in particular "dialog"-type plugins such as **appoggiatura.qml** or **TempoChange**, will cause **DockArticulate** to close its panel when the other plugin closes.  This is currently (3 Oct 2019) a design problem in Qt/MuseScore, and is true of any dock-type plugin. **rednote.qml** has been upgraded to ***not*** dismiss open dock plugins in this fashion (although it is not a "dialog"-type plugin).
 
 Please report problems, especially reproducible cases of failures of other MuseScore functions when the plugin is active (displayed).
