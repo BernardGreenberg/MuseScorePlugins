@@ -10,6 +10,8 @@ It is of little value to assign a shortcut to the plugin (**DockArticulate**), a
 
 The "Show in score" functionality is slightly different.  The **Show in score** button, activated when a range is selected, works the same way.  But in **articulate.qml**, the action of **Leave in place** was associated with exiting the plugin, which has no meaning here.  If you want to leave them in place, just go on editing  your score.  The **Undo them** button is now just **Undo**, and is exactly equivalent to ctrl-Z (Command-Z) Undo (i.e., it applies to any action), and has no particular advantage (other than nostalgia) over simply typing the usual keystroke.
 
+(5 Oct 2019) With this plugin, an "articulation browse mode" is possible; it's not something the plugin does, but something you can do.  If **DockArticulate** is active, you can click on a note and press "Arrow Right" repeatedly to step through a melody, displaying the articulation times of each note as you do, without any additional gesture.
+
 This plugin does not (yet) replace the older one, whose usage model you might still prefer.  I'll try to maintain them in parallel; there is no convenient way to share code in this paradigm.
 
 Note that the use of any other plugin, in particular "dialog"-type plugins such as **appoggiatura.qml** or **TempoChange**, will cause **DockArticulate** to close its panel when the other plugin closes.  This is currently (3 Oct 2019) a design problem in Qt/MuseScore, and is true of any dock-type plugin. **rednote.qml** has been upgraded to ***not*** dismiss open dock plugins in this fashion (although it is not a "dialog"-type plugin).
