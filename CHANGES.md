@@ -2,7 +2,7 @@
 * **DockArticulate.qml 3.4** clears the display reliably when a non-note is clicked on.
 
 * **3 Oct 2019**
-* **rednote.qml version 3.2** changes its internal workings not to call **Qt.Quit()**, whose effect (when called) was to close down the MuseScore plugin engine, which undesirably closes open dock-type plugins such as **DockArticulate**, i.e., to close an open **DockArticulate** UI when a note was reddened with **rednote**.  Dialog-type plugins (**appoggiatura** and **triller**) will continue to close dock plugins when closed until a better solution can be designed (possibly MS Score Core changes).
+* **rednote.qml version 3.2** changes its internal workings not to call **Qt.Quit()**, whose effect (when called) was to close down the MuseScore plugin engine, which undesirably closes open dock-type plugins such as **DockArticulate**, i.e., to close an open **DockArticulate** UI when a note was reddened with **rednote**.  Dialog-type plugins (**appoggiatura** and **triller**, as well as unrelated ones such as **TempoChanges**) will continue to close dock-type plugins when they are closed until a better solution can be designed and implemented (possibly MuseScore Core changes).
 
 * **2 Oct 2019**
 * **DockArticulate.qml** version 3.3 is a new, additional, plugin which implements the functionality of **articulate.qml** as a "dock plugin", that is, constantly visible (if wanted) and responding to user selection of notes and ranges automatically.  This allows viewing of note articulation parameters without any user action at all, and editing in a way almost identical to that in the inspector.  See ![DockArticulate.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/DockArticulate.md).
