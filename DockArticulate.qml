@@ -12,6 +12,7 @@
 //  the file LICENCE.GPL
 //
 //  3.4 - 4 Oct 19 - clear_all if click on non-note.
+//  3.5 - 5 Oct 19 - complex test for the latter for click-once on blank.
 //=============================================================================
 
 import QtQuick 2.2
@@ -49,7 +50,7 @@ import QtQuick.Dialogs 1.1
 
 
 MuseScore {
-      version:  "3.4"
+      version:  "3.5"
       description: "This plugin adjusts the on/off times of a note."
       menuPath: "Plugins.DockArticulate"
 
@@ -75,7 +76,17 @@ MuseScore {
             get_notes()
         }
 	else if (display_up) {
-	    clear_all();
+	    // This complex test fires the first time a user clicks blank space
+	    // when something is selected. This hook is called, but state.selectionChanged
+	    // is not on (it should be). The second time the blank space is clicked, it
+	    // works properly (v. 3.5).  Unfortunately, this turns off the nice feature
+	    // of triggering us on keyboard-entered notes (to be solved).
+	    if (!curScore.selection || !curScore.selection.elements ||
+		(curScore.selection.elements.len == undefined) || 
+		(curScore.selection.elements.len == 0) ) {
+
+		clear_all();
+	    }
 	}
      }
 
