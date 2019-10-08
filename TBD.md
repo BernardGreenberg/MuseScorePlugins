@@ -28,3 +28,6 @@ appoggiatura  - (suggestion, not really feasible in current UX) - work with disp
 
 10/3/2019 \
 DockArticulate - diagnose bad input at "Apply" time (raise complaint dialog).
+
+10/8/2019 \
+triller - make it useful for tied notes -- probably extension of "trailer pieces"
