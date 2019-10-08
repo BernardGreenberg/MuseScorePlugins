@@ -20,7 +20,7 @@ triller - offer option of 0-n "trailer pieces" on home note, i.e., *Praller*
 Initialize trill plugin beat-count with #of noteEvents currently there
 
 8/31/2019 \
-~Appogg - don't disqualify because of main note overlap - detect and report and allow editing it.~ 3.1 \T
+~Appogg - don't disqualify because of main note overlap - detect and report and allow editing it.~ 3.1
 
 9/28/2019 \
 triller - try to infer parameters from extant ornamentation on note. \
