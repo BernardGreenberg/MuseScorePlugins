@@ -28,4 +28,7 @@ If the tie is just a rhythmic notation within a measure, as here, I click on and
 
 ![Rhythmic tieing](tieartic2.png)
 
+## On-time and off-time both, for tied notes
+
+You may well wonder what is required to adjust *both* the on-time and the off-time of a chain of two or more tied notes.  Adjusting the on-time is not very common -- I know of only two cases, keyboard "rolled" arpeggi and cross-bowed string-instruments (the native MuseScore arpeggio feature sets on-times).  If you have a note (or chord) tied to one or more notes, and wish to delay the start of the first and cut back the end of the last, do exactly that: edit both (first and last in chain) notes with the plugin, changing the on-time of the first and the off-time of the last.
 
