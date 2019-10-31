@@ -1,8 +1,8 @@
-**2 October 2019 — DockArticulate.qml**
+**2 October 2019 — DockArticulate.qml** (upd 10/31/2019)
 
 **DockArticulate.qml** is a new version of the **articulate.qml** plugin which stays visible, like the Inspector or palettes, and responds every single time a note is entered or otherwise selected (clicked on), or a range is selected or modified, constantly displaying on-time and off-time.  That means that all you have to do to see the on-time and off-time of a note is click on it.  The plugin "docks" in the lower-left-hand corner of the screen, under the palettes, and (like all docked UI elements) can be "undocked" and moved wherever you wish with the little arrows in its title-bar.
 
-The plugin requires 3.3 Beta (or release) of vintage 3.3.0.23833 (Oct 2) or better.  On earlier 3.3 it won't load.
+The plugin requires MuseScore 3.3 (or later) (3.3 betas earlier than 3.3.0.23833 (Oct 2) won't work).  MuseScore 3.3 is now (10/31/2019) the standard released version.
 
 The set and meaning of the input-boxes and buttons are almost identical to those of the **articulate.qml** plugin, and change as selections come and go.  In order to change a numeric value, you must select it with the mouse, as in the Inspector -- it can't auto-select as does **articulate.qml** (for all you did was select a note).  But in one respect, it is more like **articulate.qml** than like the Inspector, *viz.,* your input is not accepted until you press **Apply** or **ENTER** (the Inspector installs intermediate, partially-typed values).  As with **articulate.qml**, if you enter a bad value in either input box, these values will not be used; since the plugin doesn't "dismiss" as does **articulate.qml**, you will know that the values were good when the selection box around the input boxes goes away (**articulate.qml** will close its dialog when values are accepted, which is not an option here). If either value is bad, the selection box will stay.
 
