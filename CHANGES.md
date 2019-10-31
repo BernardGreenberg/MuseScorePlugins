@@ -1,3 +1,5 @@
+* **31 Oct 2019**  Noted official release of 3.3 as standard MuseScore, in several documents here and on site.
+
 * **5 Oct 2019**
 * **DockArticulate.qml 3.5** improve 3.4 to clear display when single-click on blank space (patch around complex misbehavior of new MS core code to support this).  Document "articulation browse mode" usage trick (no new functionality involved).
 
