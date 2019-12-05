@@ -1,4 +1,4 @@
-* **5 Dec 2019**  Renamed myself from BernardSGreenberg to BernardGreenberg, as originally intended (deleted ancient unused work-associated account holding that name. Thanks GitHub Developer Support for the mantras.
+* **5 Dec 2019**  Renamed myself from BernardSGreenberg to BernardGreenberg, as originally intended (deleted ancient unused work-associated account holding that name, moving internal links (and the MuseScore pointers). Thanks GitHub Developer Support for the mantras.
 
 * **31 Oct 2019**  Noted official release of 3.3 as standard MuseScore, in several documents here and on site.
 
