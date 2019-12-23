@@ -1,5 +1,5 @@
 * **23 Dec 2019**
-**triller.qml 3.2** Adds a “trailing step” capability; that is, when **Final ‰** is specified (as non-zero (zero is the default)), the trill is squeezed into the beginning of the note, i.e., the length of the note *minus that*.  The specified per-millage will be given to the sounding of the main note, with the last trill alternation tied to it.  This is a very common effect in authentic performance, and covers the case of “short trills”. An example should suffice:
+**triller.qml 3.2** Adds a “trailing step” capability; that is, when nonzero **Final ‰** is specified (zero is the default), the trill is squeezed into the beginning of the note, i.e., the length of the note *minus that*.  The specified per-millage will be given to the sounding of the main note, with the last trill alternation tied to it.  This is a very common effect in authentic performance, and covers the case of “short trills”. An example should suffice:
 
 ![Trill final step example](TrillFinalStep.png)
 
