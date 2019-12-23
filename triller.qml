@@ -10,6 +10,8 @@
 //  it under the terms of the GNU General Public License version 2
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
+//
+//  Documentation:  https://musescore.org/en/project/articulation-and-ornamentation-control
 //=============================================================================
 
 import QtQuick 2.2
@@ -17,15 +19,16 @@ import MuseScore 3.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.3
 import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs 1.2
 
 
 
 
 MuseScore {
-      version:  "3.0"
+      version:  "3.2"
       description: "This plugin generates custom trills with baroque details."
       menuPath: "Plugins.Triller"
+      id: dlg
 
       pluginType: "dialog"
       requiresScore: true
@@ -34,7 +37,7 @@ MuseScore {
       property var the_note : null;
 
       width: 400
-      height: 200
+      height: 224
 
     onRun: {
 	  if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
@@ -125,6 +128,11 @@ MuseScore {
             beats += 1
         }
 
+        var final_milles = parseInt(finalField.text);
+        if (isNaN(final_milles) || final_milles < 0 || final_milles >=1000) {
+            return false;
+         }
+        
         var program = []
         var trill_beats = beats
         if (nachschlag_mordent) {
@@ -154,11 +162,12 @@ MuseScore {
             program.push(unten_steps);
             program.push(0);
         }
-        return function() {install_trill(note, program);};
+        return function() {install_trill(note, program, final_milles);};
     }
 
-    function install_trill(note, program) {
-        var len = Math.floor(1000/program.length);
+    function install_trill(note, program, final_milles) {
+        var trillable_len = 1000 - final_milles;
+        var len = Math.floor(trillable_len/program.length);
         var time = 0;
         console.log("Final program:", program)
         curScore.startCmd();
@@ -168,6 +177,9 @@ MuseScore {
             var pevt = note.createPlayEvent()
             pevt.pitch = program[i];
             pevt.ontime = time;
+            if (final_milles && i == program.length - 1) {
+                 len += final_milles;
+            }
             pevt.len = len;
             playEvents.push(pevt)                 // Append to list
             time += len;
@@ -307,7 +319,7 @@ MuseScore {
         TextField {
             id: beatsField
             implicitHeight: 24
-            placeholderText: "8"
+            text: "8"
             focus: true
             Keys.onReturnPressed : {
                 maybe_finish()
@@ -316,8 +328,27 @@ MuseScore {
                 Qt.quit()
             }
         }
+        
+        // Row 6
 
-	// Row 6
+       Label {
+          text: "Final ‰"
+       }
+       TextField {
+          id: finalField
+          implicitHeight: 24
+          text: "0"
+          focus: false
+          Keys.onReturnPressed: {
+              maybe_finish()
+          }
+          Keys.onEscapePressed: {
+             Qt.quit()
+          }
+        }
+
+
+	// Row 7
 
         Button {
             id: applyButton
@@ -333,7 +364,7 @@ MuseScore {
             Layout.columnSpan: 1
             text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
             onClicked: {
-                Qt.quit();
+		Qt.quit()
             }
         }
     }
