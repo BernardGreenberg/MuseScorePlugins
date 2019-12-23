@@ -1,3 +1,11 @@
+* **23 Dec 2019**
+**triller.qml 3.2** Adds a “trailing step” capability; that is, when **Final ‰** is specified (as non-zero (zero is the default)), the trill is squeezed into the beginning of the note, i.e., the length of the note *minus that*.  The specified per-millage will be given to the sounding of the main note, with the last trill alternation tied to it.  This is a very common effect in authentic performance, and covers the case of “short trills”. An example should suffice:
+
+![Trill final step example](TrillFinalStep.png)
+
+Also, the default **Schläge** of 8 actually works; if no other value is put there, 8 trill beats will be authored.
+
+
 * **5 Dec 2019**  Renamed myself from BernardSGreenberg to BernardGreenberg, as originally intended (deleted ancient unused work-associated account holding that name, moving internal links (and the MuseScore pointers). Thanks GitHub Developer Support for the mantras.
 
 * **31 Oct 2019**  Noted official release of 3.3 as standard MuseScore, in several documents here and on site.
