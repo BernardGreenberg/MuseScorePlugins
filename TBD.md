@@ -33,4 +33,6 @@ DockArticulate - diagnose bad input at "Apply" time (raise complaint dialog).~
 triller - make it useful for tied notes -- probably extension of "trailer pieces"
 
 1/13/2020 \
-triller - button to remove trill entirely (Gábor S.)
+triller - button to remove trill entirely (Gábor S.) \
+triller - distinguish defaulted parameters visually \
+triller - supply note-names, e.g., Halbton(D♭) for those labels.
