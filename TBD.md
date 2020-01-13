@@ -31,3 +31,6 @@ DockArticulate - diagnose bad input at "Apply" time (raise complaint dialog).~
 
 10/8/2019 \
 triller - make it useful for tied notes -- probably extension of "trailer pieces"
+
+1/13/2020 \
+triller - button to remove trill entirely (Gábor S.)
