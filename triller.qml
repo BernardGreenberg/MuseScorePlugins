@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 2012 Werner Schweer
 //  Copyright (C) 2013-2017 Nicolas Froment, Joachim Schmitz
-//  Copyright (C) 2019 Bernard Greenberg
+//  Copyright (C) 2019-2020 Bernard Greenberg
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -12,6 +12,7 @@
 //  the file LICENCE.GPL
 //
 //  Documentation:  https://musescore.org/en/project/articulation-and-ornamentation-control
+//  Version 3.3 13 Jan 2020 decodes ornamentation currently on notes
 //=============================================================================
 
 import QtQuick 2.2
@@ -22,10 +23,8 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
 
-
-
 MuseScore {
-      version:  "3.2"
+      version:  "3.3"
       description: "This plugin generates custom trills with baroque details."
       menuPath: "Plugins.Triller"
       id: dlg
@@ -40,49 +39,163 @@ MuseScore {
       height: 224
 
     onRun: {
-	  if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
-	      versionError.open()
+          if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
+              versionError.open()
               Qt.quit();
-	      return;
+              return;
            }
 
-          console.log("hello triller: onRun");
-	  var note = find_usable_note();
-	  if (note) {
-	      the_note = note;
-	      noteName.text = get_note_name(note)
-	  } else {
-	      complain("No ornamentable note selected.")
+          var note = find_usable_note();
+          if (note) {
+              the_note = note;
+              analyze_current_ornaments(note);
+              noteName.text = get_note_name(note)
+              
+          } else {
+              complain("No ornamentable note selected.")
               Qt.quit();
           }
-      }
+    }
 
+    function dump_dict(word, d) {
+        var keys = Object.keys(d);
+        var lkeys = keys.length;
+        console.log ("#", word, lkeys);
+        for (var j = 0; j < lkeys; j++) {
+            var key =  keys[j];
+            console.log(word, key, d[key]);
+        }
+    }
+
+    function defaultdict_count(d, elt) {
+        d[elt] = (d[elt] || 0) + 1;
+    }
+
+    function find_iter(d, fcn) {
+        var keys = Object.keys(d);
+        var accum = keys[0];
+        var len = keys.length;
+        for (var i = 1; i < len; i++) {
+            accum = fcn(accum, keys[i]);
+        }
+        return accum;
+    }
+
+    function analyze_current_ornaments(note) {
+        var lens = {}
+        var pitches = {}
+        var events = note.playEvents;
+        var nevents = events.length;
+        console.log("nevents", nevents);
+        if (nevents < 3) {
+            return false;
+        }
+
+        //Assay the "current events", as it were.
+        //MS non-Baroque trills will be accepted, but confirmation baroquizes.
+
+        for (var i = 0; i < nevents; i++) {
+            var evi = events[i];
+            defaultdict_count(lens, evi.len);
+            defaultdict_count(pitches, evi.pitch);
+        }
+        //dump_dict("len", lens);
+        //dump_dict("pitch", pitches);
+        var maxlen = find_iter(lens, Math.max);
+        var minlen = find_iter(lens, Math.min);
+        var maxpitch = find_iter(pitches, Math.max);
+        var minpitch = find_iter(pitches, Math.min);
+        console.log("maxlen", maxlen, "minlen", minlen, "maxpitch", maxpitch, "minpitch", minpitch);
+
+        // Set the oben/unten pitches correctly
+
+        if (maxpitch == 1) {
+            obenSemi.checked = true;
+            obenWhole.checked = false;
+        } else if (maxpitch == 2) {
+            obenWhole.checked = true;
+            obenSemi.checked = false;
+        }
+        if (minpitch == -1) {
+            untenSemi.checked = true;
+            untenWhole.checked = false;
+        } else if (minpitch == -2) {
+            untenWhole.checked = true;
+            untenSemi.checked = false;
+        }
+
+        // Check for long finale.
+
+        var finale = events[nevents-1];
+        var beats = nevents;
+        var finale_len = finale.len;
+        var finale_pitch = finale.pitch;
+        if (finale_len == maxlen && finale_len >= 3 * minlen && finale_pitch == 0) {
+            finalField.text = finale_len-minlen;
+            // beats still means the same !!
+        } else {
+            finale = false;
+        }
+        beatsField.text = beats;
+
+        // look for Vorschlaege
+        if (nevents >= 4 && events[1].pitch == 0 && events[3].pitch == 0) {
+            if (events[0].pitch == maxpitch
+                && events[2].pitch == minpitch) {
+
+                vorOben.checked = true;
+
+            } else if (events[0].pitch == minpitch
+                       && events[2].pitch == maxpitch) {
+
+                vorUnten.checked = true;
+
+            }
+        }
+
+        // Look for final mordent
+
+        if (nevents >= 4
+            && finale_len == minlen
+            && events[nevents-2].len == minlen
+            && events[nevents-3].len == minlen
+
+            && finale_pitch == 0
+            && events[nevents-2].pitch == minpitch
+            && events[nevents-3].pitch == 0
+            && events[nevents-4].pitch == maxpitch) {
+
+            nachMordent.checked = true;
+        }
+
+        return true;
+    }
 
 
     function get_note_name(note) {
-	if (note == undefined) {
-	    return note;
-	}
-	var tpc = get_tpc_name(note.tpc1)
-	return tpc + get_octave_name(tpc, note.pitch)
+        if (note == undefined) {
+            return note;
+        }
+        var tpc = get_tpc_name(note.tpc1)
+        return tpc + get_octave_name(tpc, note.pitch)
 
-	function get_tpc_name(tpc){
+        function get_tpc_name(tpc){
             var based_0 = tpc + 1;
             var result = "FCGDAEB"[based_0 % 7];
             var divergence = Math.floor(based_0 / 7);
             var appenda = ["bb", "b", "", "#", "##"];
             return result + appenda[divergence]
-	}
+        }
 
-	function get_octave_name(tpc, pitch) {
-            var answer = Math.floor(pitch / 12) - 1;
+        function get_octave_name(tpc, pitch) {
+            var answer = Math.floor(pitch / 12) - 1
             if (tpc == "B#" || tpc == "B##") {
-		answer -= 1;
+                answer -= 1;
             } else if (tpc == "Cb" || tpc == "Cbb") {
-		answer += 1;
+                answer += 1;
             }
             return answer + "";
-	}
+        }
     }
 
     function find_usable_note() {
@@ -190,7 +303,7 @@ MuseScore {
     function maybe_finish() {
         var continuation = generateTrill();
         if (continuation) {
-	    continuation();
+            continuation();
             Qt.quit();
         }
     }
@@ -201,17 +314,17 @@ MuseScore {
         anchors.margins: 10
         columns: 2
 
-	//   Row 0
+        //   Row 0
 
-	Label {
-	    text: "Note"
-	}
-	Label {
-	    id: noteName
-	    text: " "
-	}
+        Label {
+            text: "Note"
+        }
+        Label {
+            id: noteName
+            text: " "
+        }
 
-	// Row 1
+        // Row 1
 
         Label {
             text: "Oben ="
@@ -237,7 +350,7 @@ MuseScore {
             }
         }
 
-	// Row 2
+        // Row 2
 
         Label {
             text: "Unten ="
@@ -262,7 +375,7 @@ MuseScore {
             }
         }
 
-	// Row 3
+        // Row 3
 
         Label {
             text: "Vorschlag"
@@ -297,7 +410,7 @@ MuseScore {
             }
         }
 
-	// Row 4
+        // Row 4
 
         Label {
             text: " "
@@ -311,7 +424,7 @@ MuseScore {
             }
         }
 
-	// Row 5
+        // Row 5
 
         Label {
             text:  "Schläge"
@@ -348,7 +461,7 @@ MuseScore {
         }
 
 
-	// Row 7
+        // Row 7
 
         Button {
             id: applyButton
@@ -364,7 +477,7 @@ MuseScore {
             Layout.columnSpan: 1
             text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
             onClicked: {
-		Qt.quit()
+                Qt.quit()
             }
         }
     }
