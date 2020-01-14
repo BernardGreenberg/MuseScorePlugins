@@ -13,7 +13,7 @@ Pattern-driven (pairs, triplets, etc) articulation \
 8/4/2019 \
 "First" , "Last" radio buttons appear, pre-set, when member of tie chain clicked on (articulate) \
 that would require "help" button! \
-triller - offer option of nonlinear acceleration as in TempoChange plugin \
+triller - offer option of nonlinear acceleration as in TempoChange plugin (would defeat decode) \
 ~triller - offer option of 0-n "trailer pieces" on home note, i.e., *Praller*~
 
 8/30/2019 \
@@ -35,4 +35,7 @@ triller - make it useful for tied notes -- probably extension of "trailer pieces
 1/13/2020 \
 triller - button to remove trill entirely (Gábor S.) - issue with non-1000 instruments \
 ~triller - distinguish defaulted parameters visually~ \
-triller - supply note-names, e.g., Halbton(D♭) for those labels.
+triller - supply note-names, e.g., Halbton(D♭) for those labels.  tpc algebra plus/minus 2 and 5.
+
+1/14/2020 \
+triller - "initial ‰" upper , as "final" is last note (need decode, of course).
