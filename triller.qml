@@ -13,6 +13,7 @@
 //
 //  Documentation:  https://musescore.org/en/project/articulation-and-ornamentation-control
 //  Version 3.3 13 Jan 2020 decodes ornamentation currently on notes
+//  Version 3.4 14 Jan 2020 improvements/fixes to 3.3, see CHANGES.md
 //=============================================================================
 
 import QtQuick 2.2
@@ -24,7 +25,7 @@ import QtQuick.Dialogs 1.2
 
 
 MuseScore {
-      version:  "3.3"
+      version:  "3.4"
       description: "This plugin generates custom trills with baroque details."
       menuPath: "Plugins.Triller"
       id: dlg
@@ -48,7 +49,8 @@ MuseScore {
           var note = find_usable_note();
           if (note) {
               the_note = note;
-              analyze_current_ornaments(note);
+              if (!analyze_current_ornaments(note))
+                  beatsField.text = ""; // "hoc malum fecit signo..."
               noteName.text = get_note_name(note)
               
           } else {
@@ -57,55 +59,70 @@ MuseScore {
           }
     }
 
-    function dump_dict(word, d) {
-        var keys = Object.keys(d);
-        var lkeys = keys.length;
-        console.log ("#", word, lkeys);
-        for (var j = 0; j < lkeys; j++) {
-            var key =  keys[j];
-            console.log(word, key, d[key]);
+    function unique_count(arry) {
+        var ctr = {}
+        for (var i = 0; i < arry.length; i++) {
+            var elt = arry[i];
+            ctr[elt] = (ctr[elt] || 0) + 1;
         }
+        return Object.keys(ctr).length;
     }
 
-    function defaultdict_count(d, elt) {
-        d[elt] = (d[elt] || 0) + 1;
-    }
-
-    function find_iter(d, fcn) {
-        var keys = Object.keys(d);
-        var accum = keys[0];
-        var len = keys.length;
-        for (var i = 1; i < len; i++) {
-            accum = fcn(accum, keys[i]);
+    function compare_pattern(data, start, pattern) {
+        for (var i = 0; i < pattern.length; i++) {
+            if (data[start] != pattern[i])  // overrun end ok
+                return false;
+            start += 1;
         }
-        return accum;
+        return true;
     }
 
     function analyze_current_ornaments(note) {
-        var lens = {}
-        var pitches = {}
         var events = note.playEvents;
-        var nevents = events.length;
-        console.log("nevents", nevents);
-        if (nevents < 3) {
-            return false;
-        }
+        var N = events.length;
+        console.log("N events", N);
 
         //Assay the "current events", as it were.
         //MS non-Baroque trills will be accepted, but confirmation baroquizes.
 
-        for (var i = 0; i < nevents; i++) {
-            var evi = events[i];
-            defaultdict_count(lens, evi.len);
-            defaultdict_count(pitches, evi.pitch);
+        var lens = new Array(N);
+        var pitches = new Array(N);
+        for (var i = 0; i < N; i++) {
+            lens[i] = events[i].len;
+            pitches[i] = events[i].pitch;
         }
-        //dump_dict("len", lens);
-        //dump_dict("pitch", pitches);
-        var maxlen = find_iter(lens, Math.max);
-        var minlen = find_iter(lens, Math.min);
-        var maxpitch = find_iter(pitches, Math.max);
-        var minpitch = find_iter(pitches, Math.min);
-        console.log("maxlen", maxlen, "minlen", minlen, "maxpitch", maxpitch, "minpitch", minpitch);
+        console.log("Lens", lens);
+        console.log("Pitches", pitches);
+        var maxlen = Math.max.apply(Math, lens)
+        var minlen = Math.min.apply(Math, lens)
+        var nlens = unique_count(lens);
+        var maxpitch = Math.max.apply(Math, pitches)
+        var minpitch = Math.min.apply(Math, pitches)
+        var npitches = unique_count(pitches);
+        console.log("maxlen", maxlen, "minlen", minlen,
+                    "maxpitch", maxpitch, "minpitch", minpitch,
+                    "npitches", npitches, "nlens", nlens);
+
+        // See if we think we understand this ornament. Not too short or too florid,
+        // and longest note cannot be other than last.
+        if (N < 3 || npitches > 3 || nlens > 2 || maxlen != lens[N-1]) {
+            console.log("No extant recognizable ornament.");
+            return false;
+        }
+        var start_main_trill = (npitches == 2 && nlens == 1 && minpitch == 0
+                                && compare_pattern(pitches, 0, [0 , maxpitch, 0]));
+        // If it doesn't end on the main note
+        if  (pitches[N-1] != 0) {
+            if (start_main_trill) {
+                // We'll accept and lie about MS non-Baroque trills...
+                console.log("Start-main end-upper MS trill detected.");
+            } else {  // ... but nothing else.
+                return false;
+            }
+        }
+
+        // we're good to go -- set the beats field "good" ...
+        beatsField.text = N;
 
         // Set the oben/unten pitches correctly
 
@@ -124,46 +141,26 @@ MuseScore {
             untenSemi.checked = false;
         }
 
-        // Check for long finale.
-
-        var finale = events[nevents-1];
-        var beats = nevents;
-        var finale_len = finale.len;
-        var finale_pitch = finale.pitch;
-        if (finale_len == maxlen && finale_len >= 3 * minlen && finale_pitch == 0) {
-            finalField.text = finale_len-minlen;
+        // Check for long final beat.
+        // pitch==0 already checked, as well as len being greatest or same as all
+        if (lens[N-1] > minlen+2) { // rounding
+            finalField.text = lens[N-1] - minlen;
             // beats still means the same !!
-        } else {
-            finale = false;
         }
-        beatsField.text = beats;
 
         // look for Vorschlaege
-        if (nevents >= 4 && events[1].pitch == 0 && events[3].pitch == 0) {
-            if (events[0].pitch == maxpitch
-                && events[2].pitch == minpitch) {
-
-                vorOben.checked = true;
-
-            } else if (events[0].pitch == minpitch
-                       && events[2].pitch == maxpitch) {
-
-                vorUnten.checked = true;
-
-            }
+        if (compare_pattern(pitches, 0, [maxpitch, 0, minpitch, 0])) {
+            vorOben.checked = true;
+            keinVorschlag.checked = false;
+        } else if (compare_pattern(pitches, 0, [minpitch, 0, maxpitch, 0])) {
+            vorUnten.checked = true;
+            keinVorschlag.checked = false;
         }
 
         // Look for final mordent
 
-        if (nevents >= 4
-            && finale_len == minlen
-            && events[nevents-2].len == minlen
-            && events[nevents-3].len == minlen
-
-            && finale_pitch == 0
-            && events[nevents-2].pitch == minpitch
-            && events[nevents-3].pitch == 0
-            && events[nevents-4].pitch == maxpitch) {
+        if (   compare_pattern(lens, N-4,    [minlen, minlen, minlen, minlen])
+            && compare_pattern(pitches, N-4, [maxpitch, 0, minpitch, 0])) {
 
             nachMordent.checked = true;
         }
