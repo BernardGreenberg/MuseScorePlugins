@@ -14,6 +14,7 @@
 //  Documentation:  https://musescore.org/en/project/articulation-and-ornamentation-control
 //  Version 3.3 13 Jan 2020 decodes ornamentation currently on notes
 //  Version 3.4 14 Jan 2020 improvements/fixes to 3.3, see CHANGES.md
+//  Version 3.5 15 Jan 2020 integrate read/write auxiliary handling, report note names.
 //=============================================================================
 
 import QtQuick 2.2
@@ -25,7 +26,7 @@ import QtQuick.Dialogs 1.2
 
 
 MuseScore {
-      version:  "3.4"
+      version:  "3.5"
       description: "This plugin generates custom trills with baroque details."
       menuPath: "Plugins.Triller"
       id: dlg
@@ -39,6 +40,13 @@ MuseScore {
       width: 400
       height: 224
 
+    /* Facilitates consistent automatic manipulation of the checkboxes. */
+    property int n_aux_vals: 2
+    property var oben_fields: [{box: obenSemi, val: 1, tpc: -5},
+                               {box: obenWhole, val: 2, tpc: 2}]
+    property var unten_fields: [{box: untenSemi, val: -1, tpc: 5},
+                                {box: untenWhole, val: -2, tpc: -2}]
+
     onRun: {
           if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
               versionError.open()
@@ -50,13 +58,29 @@ MuseScore {
           if (note) {
               the_note = note;
               if (!analyze_current_ornaments(note))
-                  beatsField.text = ""; // "hoc malum fecit signo..."
+                  beatsField.text = ""; // "Hoc malum fecit signum..."
               noteName.text = get_note_name(note)
-              
+              augment_auxiliary_names(oben_fields, note.tpc1);
+              augment_auxiliary_names(unten_fields, note.tpc1);
           } else {
               complain("No ornamentable note selected.")
               Qt.quit();
           }
+    }
+
+    function set_auxiliary_check(aux, val, default_val) {
+        val = val || default_val;   //If 0, use default.
+        for (var i = 0; i < n_aux_vals; i++) {
+            var field = aux[i];
+            field.box.checked = (val == field.val);
+        }
+    }
+
+    function augment_auxiliary_names(aux, tpc) {
+        for (var i = 0; i < n_aux_vals; i++) {
+            var field = aux[i];
+            field.box.text += " (" + get_tpc_name(tpc + field.tpc) + ")"
+        }
     }
 
     function unique_count(arry) {
@@ -70,7 +94,7 @@ MuseScore {
 
     function compare_pattern(data, start, pattern) {
         for (var i = 0; i < pattern.length; i++) {
-            if (data[start] != pattern[i])  // overrun end ok
+            if (data[start] !== pattern[i])  // overrun end ok
                 return false;
             start += 1;
         }
@@ -124,22 +148,10 @@ MuseScore {
         // we're good to go -- set the beats field "good" ...
         beatsField.text = N;
 
-        // Set the oben/unten pitches correctly
+        // Set the oben/unten pitch checkboxes correctly
 
-        if (maxpitch == 1) {
-            obenSemi.checked = true;
-            obenWhole.checked = false;
-        } else if (maxpitch == 2) {
-            obenWhole.checked = true;
-            obenSemi.checked = false;
-        }
-        if (minpitch == -1) {
-            untenSemi.checked = true;
-            untenWhole.checked = false;
-        } else if (minpitch == -2) {
-            untenWhole.checked = true;
-            untenSemi.checked = false;
-        }
+        set_auxiliary_check(oben_fields, maxpitch, 2);
+        set_auxiliary_check(unten_fields, minpitch, -1);
 
         // Check for long final beat.
         // pitch==0 already checked, as well as len being greatest or same as all
@@ -169,20 +181,21 @@ MuseScore {
     }
 
 
+    function get_tpc_name(tpc){
+        var based_0 = tpc + 1;
+        var result = "FCGDAEB"[based_0 % 7];
+        var divergence = Math.floor(based_0 / 7);
+        var appenda = ["bb", "b", "", "#", "##"];
+        return result + appenda[divergence]
+    }
+
+
     function get_note_name(note) {
         if (note == undefined) {
             return note;
         }
         var tpc = get_tpc_name(note.tpc1)
         return tpc + get_octave_name(tpc, note.pitch)
-
-        function get_tpc_name(tpc){
-            var based_0 = tpc + 1;
-            var result = "FCGDAEB"[based_0 % 7];
-            var divergence = Math.floor(based_0 / 7);
-            var appenda = ["bb", "b", "", "#", "##"];
-            return result + appenda[divergence]
-        }
 
         function get_octave_name(tpc, pitch) {
             var answer = Math.floor(pitch / 12) - 1
@@ -207,6 +220,12 @@ MuseScore {
         return false;
     }
 
+    function get_checked_aux_step(aux) {
+        for (var i = 0; i < n_aux_vals; i++)
+            if (aux[i].box.checked)
+                return aux[i].val;
+    } //undefined errs out, but "can't happen".
+
     function generateTrill() {
         console.log("generateTrill");
         var note = the_note;
@@ -214,18 +233,10 @@ MuseScore {
             console.log("No note at Apply time.")
             return false;
         }
-        var oben_steps;
-        var unten_steps;
-        if (obenWhole.checked) {
-            oben_steps = 2;
-        } else {
-            oben_steps = 1;
-        }
-        if (untenWhole.checked) {
-            unten_steps = -2;
-        } else {
-            unten_steps = -1;
-        }
+
+        var oben_steps = get_checked_aux_step(oben_fields);
+        var unten_steps = get_checked_aux_step(unten_fields);
+
         var vor_von_oben = vorOben.checked;
         var vor_von_unten = vorUnten.checked;
         var nachschlag_mordent = nachMordent.checked;
@@ -245,19 +256,21 @@ MuseScore {
         
         var program = []
         var trill_beats = beats
+
+        function ppush(prog) {
+            var len = prog.length;
+            trill_beats -= len;
+            for (var i = 0; i < len; i++)
+                program.push(prog[i]);
+        }
+                
         if (nachschlag_mordent) {
             trill_beats -= 2;
         }
         if (vor_von_oben) {
-            trill_beats -= 4;
-            program.push(oben_steps);
-            program.push(0);
-            program.push(unten_steps);
-            program.push(0);
+            ppush([oben_steps, 0, unten_steps, 0]);
         } else if (vor_von_unten){
-            trill_beats -= 2;
-            program.push(unten_steps);
-            program.push(0);
+            ppush([unten_steps, 0]);
         }
         if (trill_beats < 0) {
             complain("Trill beats specified too few to cover request.");
@@ -265,12 +278,10 @@ MuseScore {
         }
         var reps = Math.floor(trill_beats / 2);
         for (var i = 0; i < reps; i++ ) {
-            program.push(oben_steps);
-            program.push(0);
+            ppush([oben_steps, 0]);
         }
         if (nachschlag_mordent) {
-            program.push(unten_steps);
-            program.push(0);
+            ppush([unten_steps, 0]);
         }
         return function() {install_trill(note, program, final_milles);};
     }
