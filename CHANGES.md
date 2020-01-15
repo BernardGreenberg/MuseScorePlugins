@@ -1,3 +1,5 @@
+* **15 Jan 2020**
+**triller.qml 3.5** Reports the actual enharmonically-correct note names (in parentheses) for *Halbton* & *Ton*, in every case. That is, if the note is C#, a semitone below is B#; a semitone above is D, and a tone above is D#.  Or if the note is Ab, a semitone below is G, and above Bbb, etc. The *Unton*, clicked note, and *Oben* will always have three successive note-names (scale degrees).
 
 * **14 Jan 2020**
 **triller.qml 3.4** Fixes a bug in 3.3 (not clearing "kein" checkbox).  Cleans up 3.3 code, adds improved recognition of MuseScore trills.  The default of "8" *Schläge* (number of beats) is removed.  The new rule: if the note selected has ornamentation, and the plugin understands the ornamenation (which should include all unmodified ornamentation it creates, now or in the past, as well as MS trills), the field, like all, will be preloaded with what is seen on the note.  If the note lacks ornamentation, or the ornamentation is not understood, the field will be cleared, and must be supplied by you.  There is no longer a default.
