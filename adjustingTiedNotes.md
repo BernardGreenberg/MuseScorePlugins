@@ -1,6 +1,6 @@
 # Adjusting tied notes
 
-BSG 3 Aug 2019
+BSG 3 Aug 2019 (last update 16 Jan 2020)
 
 MuseScore's representation of the articulation parameters (on-time, off-time) for tied notes is currently obscure in a way you must understand if you wish to adjust the same.  The situation may improve in the future in such a way that will allow these plugins to act in a more consistent fashion.
 
@@ -31,4 +31,8 @@ If the tie is just a rhythmic notation within a measure, as here, I click on and
 ## On-time and off-time both, for tied notes
 
 You may well wonder what is required to adjust *both* the on-time and the off-time of a chain of two or more tied notes.  Adjusting the on-time is not very common -- I know of only two cases, keyboard "rolled" arpeggi and cross-bowed string-instruments (the native MuseScore arpeggio feature sets on-times).  If you have a note (or chord) tied to one or more notes, and wish to delay the start of the first and cut back the end of the last, do exactly that: edit both (first and last in chain) notes with the plugin, changing the on-time of the first and the off-time of the last.
+
+## Trills on tied notes
+
+Trills on tied notes are actually easier to understand than articulation adjustments. Long (multi-measure) trilled notes are exceedingly common in repertoires of many centuries, and usually involve different note-values (e.g., half, whole, etc.) tied to each other.  In MuseScore, with the triller plugin, each constituent note must be trilled separately. Since at this time only trills starting on the upper note and ending on the lower are supported, they join rather well.  The number of “beats” (*Schläge* in the dialog) will *not* be the same, however, for different components if they are of different lengths.  You must scale the “rate” to work -- that is, if the trill consists of a half note (minim) tied to a whole (semibreve) to another half, and the first is given 20 beats, the second (the whole) must be be given 40, and the final minim 20 again (and maybe a mordent if wanted).   If the last component is to have nonzero *Final ‰*, that then has to be factored in, too, as shortening the final note’s trillable extent.
 
