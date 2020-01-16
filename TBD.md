@@ -30,7 +30,7 @@ appoggiatura  - (suggestion, not really feasible in current UX) - work with disp
 DockArticulate - diagnose bad input at "Apply" time (raise complaint dialog).~
 
 10/8/2019 \
-triller - make it useful for tied notes -- probably extension of "trailer pieces"
+~triller - make it useful for tied notes -- probably extension of "trailer pieces"~ (1/16/20 -- already useful, see doc.)
 
 1/13/2020 \
 triller - button to remove trill entirely (Gábor S.) - issue with non-1000 instruments \
