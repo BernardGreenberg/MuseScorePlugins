@@ -1,3 +1,5 @@
+* **20 Jan 2020**  ![TrillerTurns.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/TrillerTurns.md) added,explaining a non-obvious technique (how to do ”turns” with the triller plugin).
+
 * **15 Jan 2020**
 **triller.qml 3.5** Reports the actual enharmonically-correct note names (in parentheses) for *Halbton* & *Ton*, in every case. That is, if the note is C#, a semitone below is B#; a semitone above is D, and a tone above is D#.  Or if the note is Ab, a semitone below is G, and above Bbb, etc. The *Unten*, clicked note, and *Oben* will always have three successive note-names (scale degrees).
 
