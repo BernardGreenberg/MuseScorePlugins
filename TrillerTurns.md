@@ -1,6 +1,6 @@
 **20 January 2020**
 
-**Turns with the triller plugin**
+**Turns with the triller plugin** (Or “one good turn deserves another”)
 
 The triller plugin can be used to create carefully-timed “turns” and “inverted turns”, although some care is required. Here is an example
 (the note marked with that ornament) and the triller plugin parameters that produce the effect on the second staff.  The “Final” of 750 cuts out three sixteenths 
