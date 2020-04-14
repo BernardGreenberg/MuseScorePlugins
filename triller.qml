@@ -15,6 +15,7 @@
 //  Version 3.3 13 Jan 2020 decodes ornamentation currently on notes
 //  Version 3.4 14 Jan 2020 improvements/fixes to 3.3, see CHANGES.md
 //  Version 3.5 15 Jan 2020 integrate read/write auxiliary handling, report note names.
+//  Version 3.6 10 Apr 2020 baroque trill is now an option. If unchecked, normal trill is generated.
 //=============================================================================
 
 import QtQuick 2.2
@@ -135,12 +136,15 @@ MuseScore {
         }
         var start_main_trill = (npitches == 2 && nlens == 1 && minpitch == 0
                                 && compare_pattern(pitches, 0, [0 , maxpitch, 0]));
-        // If it doesn't end on the main note
+        // If it doesn't end on the main note: either it has a Nachschlag or it is not baroque
         if  (pitches[N-1] != 0) {
             if (start_main_trill) {
-                // We'll accept and lie about MS non-Baroque trills...
+                // MS non-Baroque trills start from lower note (main pitch). This is the case detected here...
                 console.log("Start-main end-upper MS trill detected.");
-            } else {  // ... but nothing else.
+            } else if (pitches[N-1] == minpitch) { // probably has a Nachschlag
+                console.log("Start-main end-upper MS trill with Nachschlag detected.");
+            } else{  // ... but nothing else.
+                console.log("No valid trill detected.");
                 return false;
             }
         }
@@ -160,13 +164,17 @@ MuseScore {
             // beats still means the same !!
         }
 
+        // ToDo: there is no Vorschlaege or Nachschlaege if it's not baroque (baroque means start from upper). Vorschlaege and Nachschlaege only make sense when it starts from lower. Check this and treat it, maybe leaving a message.
+
         // look for Vorschlaege
         if (compare_pattern(pitches, 0, [maxpitch, 0, minpitch, 0])) {
             vorOben.checked = true;
             keinVorschlag.checked = false;
+            cb_baroque.checked = true;
         } else if (compare_pattern(pitches, 0, [minpitch, 0, maxpitch, 0])) {
             vorUnten.checked = true;
             keinVorschlag.checked = false;
+            cb_baroque.checked = true;
         }
 
         // Look for final mordent
@@ -175,6 +183,15 @@ MuseScore {
             && compare_pattern(pitches, N-4, [maxpitch, 0, minpitch, 0])) {
 
             nachMordent.checked = true;
+            cb_baroque.checked = true;
+        } else if (   compare_pattern(lens, N-4,    [minlen, minlen, minlen, minlen])
+                    && compare_pattern(pitches, N-4, [0, maxpitch, 0, minpitch])) {
+            nachMordent.checked = true;
+            cb_baroque.checked = false;
+        } else if (pitches[N-1] == 0) { // Look for baroque if there is no final mordent
+            cb_baroque.checked = true;
+        } else {
+            cb_baroque.checked = false;
         }
 
         return true;
@@ -240,6 +257,8 @@ MuseScore {
         var vor_von_oben = vorOben.checked;
         var vor_von_unten = vorUnten.checked;
         var nachschlag_mordent = nachMordent.checked;
+        
+        var baroque_trill = cb_baroque.checked;
 
         var beats = parseInt(beatsField.text);
         if (isNaN(beats)){
@@ -267,21 +286,34 @@ MuseScore {
         if (nachschlag_mordent) {
             trill_beats -= 2;
         }
+        
+
         if (vor_von_oben) {
             ppush([oben_steps, 0, unten_steps, 0]);
         } else if (vor_von_unten){
             ppush([unten_steps, 0]);
         }
+
+
+        
         if (trill_beats < 0) {
             complain("Trill beats specified too few to cover request.");
             return false;
         }
         var reps = Math.floor(trill_beats / 2);
         for (var i = 0; i < reps; i++ ) {
-            ppush([oben_steps, 0]);
+            if (baroque_trill) {
+                  ppush([oben_steps, 0]);
+            } else {
+                  ppush([0, oben_steps]);
+            }
         }
         if (nachschlag_mordent) {
-            ppush([unten_steps, 0]);
+            if (baroque_trill) {
+                  ppush([unten_steps, 0]);
+            } else {
+                  ppush([0, unten_steps]);
+            }
         }
         return function() {install_trill(note, program, final_milles);};
     }
@@ -430,8 +462,14 @@ MuseScore {
                 checked: false
                 text: qsTr("Nachschlag-Mordent")
             }
+            
+            CheckBox {
+                id: cb_baroque
+                checked: true
+                text: qsTr("Barock")
+            }
         }
-
+        
         // Row 5
 
         Label {
