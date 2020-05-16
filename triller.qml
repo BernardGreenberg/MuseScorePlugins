@@ -31,14 +31,10 @@ MuseScore {
       menuPath: "Plugins.Triller"
       id: dlg
 
-      pluginType: "dialog"
       requiresScore: true
 
       property int margin: 10
       property var the_note : null;
-
-      width: 400
-      height: 224
 
     /* Facilitates consistent automatic manipulation of the checkboxes. */
     property int n_aux_vals: 2
@@ -50,7 +46,7 @@ MuseScore {
     onRun: {
           if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
               versionError.open()
-              Qt.quit();
+              rootDialog.visible = false;
               return;
            }
 
@@ -64,8 +60,10 @@ MuseScore {
               augment_auxiliary_names(unten_fields, note.tpc1);
           } else {
               complain("No ornamentable note selected.")
-              Qt.quit();
+              rootDialog.visible = false;
+              return;
           }
+          rootDialog.visible = true;
     }
 
     function set_auxiliary_check(aux, val, default_val) {
@@ -253,7 +251,7 @@ MuseScore {
         if (isNaN(final_milles) || final_milles < 0 || final_milles >=1000) {
             return false;
          }
-        
+
         var program = []
         var trill_beats = beats
 
@@ -263,7 +261,7 @@ MuseScore {
             for (var i = 0; i < len; i++)
                 program.push(prog[i]);
         }
-                
+
         if (nachschlag_mordent) {
             trill_beats -= 2;
         }
@@ -306,186 +304,192 @@ MuseScore {
             time += len;
         }
         curScore.endCmd();
-    }   
+    }
 
     function maybe_finish() {
         var continuation = generateTrill();
         if (continuation) {
             continuation();
-            Qt.quit();
+            rootDialog.visible = false;
         }
     }
 
-    GridLayout {
-        id: 'mainLayout'
-        anchors.fill: parent
-        anchors.margins: 10
-        columns: 2
+    Dialog {
+        id: rootDialog
+        visible: false // shown when onRun is emitted
+        standardButtons: Qt.NoButton
 
-        //   Row 0
+        GridLayout {
+            id: mainLayout
+            anchors.fill: parent
+            anchors.margins: 10
+            columns: 2
 
-        Label {
-            text: "Note"
-        }
-        Label {
-            id: noteName
-            text: " "
-        }
+            //   Row 0
 
-        // Row 1
+            Label {
+                text: "Note"
+            }
+            Label {
+                id: noteName
+                text: " "
+            }
 
-        Label {
-            text: "Oben ="
-        }
-        // These "radio buttons" don't exclude each other.
-        // We have to teach them how to do their job.
-        RowLayout {
-            RadioButton {
-                id: obenWhole
-                checked: true
-                text: qsTr("Ton")
+            // Row 1
+
+            Label {
+                text: "Oben ="
+            }
+            // These "radio buttons" don't exclude each other.
+            // We have to teach them how to do their job.
+            RowLayout {
+                RadioButton {
+                    id: obenWhole
+                    checked: true
+                    text: qsTr("Ton")
+                    onClicked: {
+                        obenSemi.checked = false
+                    }
+                }
+
+                RadioButton {
+                    id: obenSemi
+                    text: qsTr("Halbton")
+                    onClicked: {
+                        obenWhole.checked = false
+                    }
+                }
+            }
+
+            // Row 2
+
+            Label {
+                text: "Unten ="
+            }
+            RowLayout {
+                RadioButton {
+                    id: untenWhole
+                    text: qsTr("Ton")
+                    onClicked: {
+                        untenSemi.checked = false
+                    }
+                }
+
+
+                RadioButton {
+                    id: untenSemi
+                    checked: true
+                    text: qsTr("Halbton")
+                    onClicked : {
+                        untenWhole.checked = false
+                    }
+                }
+            }
+
+            // Row 3
+
+            Label {
+                text: "Vorschlag"
+            }
+
+            RowLayout {
+                RadioButton {
+                    id: vorOben
+                    text: qsTr("von oben")
+                    onClicked: {
+                        vorUnten.checked = false
+                        keinVorschlag.checked = false
+                    }
+                }
+                RadioButton {
+                    id: vorUnten
+                    text: qsTr("von unten")
+                    onClicked: {
+                        vorOben.checked = false
+                        keinVorschlag.checked = false
+                    }
+                }
+                RadioButton {
+                    id: keinVorschlag
+                    checked: true
+                    text: qsTr("kein")
+                    onClicked: {
+                        vorUnten.checked = false
+                        vorOben.checked = false
+                    }
+
+                }
+            }
+
+            // Row 4
+
+            Label {
+                text: " "
+            }
+
+            RowLayout {
+                CheckBox {
+                    id: nachMordent
+                    checked: false
+                    text: qsTr("Nachschlag-Mordent")
+                }
+            }
+
+            // Row 5
+
+            Label {
+                text:  "Schläge"
+            }
+            TextField {
+                id: beatsField
+                implicitHeight: 24
+                text: "8"
+                focus: true
+                Keys.onReturnPressed : {
+                    maybe_finish()
+                }
+                Keys.onEscapePressed : {
+                    rootDialog.visible = false;
+                }
+            }
+
+            // Row 6
+
+           Label {
+              text: "Final ‰"
+           }
+           TextField {
+              id: finalField
+              implicitHeight: 24
+              text: "0"
+              focus: false
+              Keys.onReturnPressed: {
+                  maybe_finish()
+              }
+              Keys.onEscapePressed: {
+                 rootDialog.visible = false;
+              }
+            }
+
+
+            // Row 7
+
+            Button {
+                id: applyButton
+                Layout.columnSpan:1
+                text: qsTranslate("PrefsDialogBase", "Apply")
                 onClicked: {
-                    obenSemi.checked = false
+                    maybe_finish()
                 }
             }
 
-            RadioButton {
-                id: obenSemi
-                text: qsTr("Halbton")
+            Button {
+                id: cancelButton
+                Layout.columnSpan: 1
+                text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
                 onClicked: {
-                    obenWhole.checked = false
+                    rootDialog.visible = false;
                 }
-            }
-        }
-
-        // Row 2
-
-        Label {
-            text: "Unten ="
-        }
-        RowLayout {
-            RadioButton {
-                id: untenWhole
-                text: qsTr("Ton")
-                onClicked: {
-                    untenSemi.checked = false
-                }
-            }
-
-
-            RadioButton {
-                id: untenSemi
-                checked: true
-                text: qsTr("Halbton")
-                onClicked : {
-                    untenWhole.checked = false
-                }
-            }
-        }
-
-        // Row 3
-
-        Label {
-            text: "Vorschlag"
-        }
-
-        RowLayout {
-            RadioButton {
-                id: vorOben
-                text: qsTr("von oben")
-                onClicked: {
-                    vorUnten.checked = false
-                    keinVorschlag.checked = false
-                }
-            }
-            RadioButton {
-                id: vorUnten
-                text: qsTr("von unten")
-                onClicked: {
-                    vorOben.checked = false
-                    keinVorschlag.checked = false
-                }
-            }
-            RadioButton {
-                id: keinVorschlag
-                checked: true
-                text: qsTr("kein")
-                onClicked: {
-                    vorUnten.checked = false
-                    vorOben.checked = false
-                }
-
-            }
-        }
-
-        // Row 4
-
-        Label {
-            text: " "
-        }
-
-        RowLayout {
-            CheckBox {
-                id: nachMordent
-                checked: false
-                text: qsTr("Nachschlag-Mordent")
-            }
-        }
-
-        // Row 5
-
-        Label {
-            text:  "Schläge"
-        }
-        TextField {
-            id: beatsField
-            implicitHeight: 24
-            text: "8"
-            focus: true
-            Keys.onReturnPressed : {
-                maybe_finish()
-            }
-            Keys.onEscapePressed : {
-                Qt.quit()
-            }
-        }
-        
-        // Row 6
-
-       Label {
-          text: "Final ‰"
-       }
-       TextField {
-          id: finalField
-          implicitHeight: 24
-          text: "0"
-          focus: false
-          Keys.onReturnPressed: {
-              maybe_finish()
-          }
-          Keys.onEscapePressed: {
-             Qt.quit()
-          }
-        }
-
-
-        // Row 7
-
-        Button {
-            id: applyButton
-            Layout.columnSpan:1
-            text: qsTranslate("PrefsDialogBase", "Apply")
-            onClicked: {
-                maybe_finish()
-            }
-        }
-
-        Button {
-            id: cancelButton
-            Layout.columnSpan: 1
-            text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
-            onClicked: {
-                Qt.quit()
             }
         }
     }
@@ -503,18 +507,18 @@ MuseScore {
       title: "Trill generator usage error"
       text: "Triller usage error."
       onAccepted: {
-         Qt.quit()
+         rootDialog.visible = false;
       }
    }
 
-    
+
  MessageDialog {
       id: versionError
       visible: false
       title: qsTr("Unsupported MuseScore Version")
       text: qsTr("This plugin needs MuseScore 3.3 or later")
       onAccepted: {
-         Qt.quit()
+         rootDialog.visible = false;
          }
       }
 
