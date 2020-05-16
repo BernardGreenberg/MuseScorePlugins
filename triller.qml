@@ -31,7 +31,6 @@ MuseScore {
       menuPath: "Plugins.Triller"
       id: dlg
 
-      pluginType: "dialog"
       requiresScore: true
 
       property int margin: 10
@@ -316,6 +315,8 @@ MuseScore {
         }
     }
 
+    Dialog {
+    visible: true
     GridLayout {
         id: 'mainLayout'
         anchors.fill: parent
@@ -488,6 +489,7 @@ MuseScore {
                 Qt.quit()
             }
         }
+    }
     }
 
     function complain(text) {
