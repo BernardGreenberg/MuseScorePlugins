@@ -28,44 +28,44 @@ import QtQuick.Dialogs 1.2
 
 
 MuseScore {
-      version:  "3.6"
-      description: "This plugin generates custom trills with baroque details."
-      menuPath: "Plugins.Triller"
-      id: dlg
+    version:  "3.6"
+    description: "This plugin generates custom trills with baroque details."
+    menuPath: "Plugins.Triller"
+    id: dlg
 
-      requiresScore: true
+    requiresScore: true
 
-      property int margin: 10
-      property var the_note : null;
+    property int margin: 10
+    property var the_note : null;
 
     /* Facilitates consistent automatic manipulation of the checkboxes. */
     property int n_aux_vals: 2
     property var oben_fields: [{box: obenSemi, val: 1, tpc: -5},
-                               {box: obenWhole, val: 2, tpc: 2}]
+        {box: obenWhole, val: 2, tpc: 2}]
     property var unten_fields: [{box: untenSemi, val: -1, tpc: 5},
-                                {box: untenWhole, val: -2, tpc: -2}]
+        {box: untenWhole, val: -2, tpc: -2}]
 
     onRun: {
-          if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
-              versionError.open()
-              rootDialog.visible = false;
-              return;
-           }
+        if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
+            versionError.open()
+            rootDialog.visible = false;
+            return;
+        }
 
-          var note = find_usable_note();
-          if (note) {
-              the_note = note;
-              if (!analyze_current_ornaments(note))
-                  beatsField.text = ""; // "Hoc malum fecit signum..."
-              noteName.text = get_note_name(note)
-              augment_auxiliary_names(oben_fields, note.tpc1);
-              augment_auxiliary_names(unten_fields, note.tpc1);
-          } else {
-              complain("No ornamentable note selected.")
-              rootDialog.visible = false;
-              return;
-          }
-          rootDialog.visible = true;
+        var note = find_usable_note();
+        if (note) {
+            the_note = note;
+            if (!analyze_current_ornaments(note))
+                beatsField.text = ""; // "Hoc malum fecit signum..."
+            noteName.text = get_note_name(note)
+            augment_auxiliary_names(oben_fields, note.tpc1);
+            augment_auxiliary_names(unten_fields, note.tpc1);
+        } else {
+            complain("No ornamentable note selected.")
+            rootDialog.visible = false;
+            return;
+        }
+        rootDialog.visible = true;
     }
 
     function set_auxiliary_check(aux, val, default_val) {
@@ -172,7 +172,7 @@ MuseScore {
         // Look for final mordent
 
         if (   compare_pattern(lens, N-4,    [minlen, minlen, minlen, minlen])
-            && compare_pattern(pitches, N-4, [maxpitch, 0, minpitch, 0])) {
+                && compare_pattern(pitches, N-4, [maxpitch, 0, minpitch, 0])) {
 
             nachMordent.checked = true;
         }
@@ -252,7 +252,7 @@ MuseScore {
         var final_milles = parseInt(finalField.text);
         if (isNaN(final_milles) || final_milles < 0 || final_milles >=1000) {
             return false;
-         }
+        }
 
         var program = []
         var trill_beats = beats
@@ -299,7 +299,7 @@ MuseScore {
             pevt.pitch = program[i];
             pevt.ontime = time;
             if (final_milles && i == program.length - 1) {
-                 len += final_milles;
+                len += final_milles;
             }
             pevt.len = len;
             playEvents.push(pevt)                 // Append to list
@@ -319,12 +319,14 @@ MuseScore {
     Dialog {
         id: rootDialog
         visible: false // shown when onRun is emitted
-        standardButtons: Qt.NoButton
+
+        standardButtons: StandardButton.Apply | StandardButton.Cancel
+        onApply: maybe_finish();
+        onRejected: rootDialog.visible = false;
 
         GridLayout {
             id: mainLayout
             anchors.fill: parent
-            anchors.margins: 10
             columns: 2
 
             //   Row 0
@@ -457,42 +459,22 @@ MuseScore {
 
             // Row 6
 
-           Label {
-              text: "Final ‰"
-           }
-           TextField {
-              id: finalField
-              implicitHeight: 24
-              text: "0"
-              focus: false
-              Keys.onReturnPressed: {
-                  maybe_finish()
-              }
-              Keys.onEscapePressed: {
-                 rootDialog.visible = false;
-              }
+            Label {
+                text: "Final ‰"
             }
-
-
-            // Row 7
-
-            Button {
-                id: applyButton
-                Layout.columnSpan:1
-                text: qsTranslate("PrefsDialogBase", "Apply")
-                onClicked: {
+            TextField {
+                id: finalField
+                implicitHeight: 24
+                text: "0"
+                focus: false
+                Keys.onReturnPressed: {
                     maybe_finish()
                 }
-            }
-
-            Button {
-                id: cancelButton
-                Layout.columnSpan: 1
-                text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
-                onClicked: {
+                Keys.onEscapePressed: {
                     rootDialog.visible = false;
                 }
             }
+
         }
     }
 
@@ -501,27 +483,27 @@ MuseScore {
         complaintDialog.open();
     }
 
- MessageDialog {
-      id: complaintDialog
-      icon: StandardIcon.Warning
-      standardButtons: StandardButton.Ok
-      modality: Qt.ApplicationModal
-      title: "Trill generator usage error"
-      text: "Triller usage error."
-      onAccepted: {
-         rootDialog.visible = false;
-      }
-   }
+    MessageDialog {
+        id: complaintDialog
+        icon: StandardIcon.Warning
+        standardButtons: StandardButton.Ok
+        modality: Qt.ApplicationModal
+        title: "Trill generator usage error"
+        text: "Triller usage error."
+        onAccepted: {
+            rootDialog.visible = false;
+        }
+    }
 
 
- MessageDialog {
-      id: versionError
-      visible: false
-      title: qsTr("Unsupported MuseScore Version")
-      text: qsTr("This plugin needs MuseScore 3.3 or later")
-      onAccepted: {
-         rootDialog.visible = false;
-         }
-      }
+    MessageDialog {
+        id: versionError
+        visible: false
+        title: qsTr("Unsupported MuseScore Version")
+        text: qsTr("This plugin needs MuseScore 3.3 or later")
+        onAccepted: {
+            rootDialog.visible = false;
+        }
+    }
 
 }
