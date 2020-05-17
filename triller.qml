@@ -14,7 +14,9 @@
 //  Documentation:  https://musescore.org/en/project/articulation-and-ornamentation-control
 //  Version 3.3 13 Jan 2020 decodes ornamentation currently on notes
 //  Version 3.4 14 Jan 2020 improvements/fixes to 3.3, see CHANGES.md
-//  Version 3.5 15 Jan 2020 integrate read/write auxiliary handling, report note names.
+//  Version 3.5 15 Jan 2020 integrate read/write auxiliary handling, report note names./
+//  Version 3.6 16 Mar 2020 uses "QuickDialogs" instead of "dialog-type plugin", removing
+//                          need for Qt.quit(), which takes down docks.  Thanks @Marr11317.
 //=============================================================================
 
 import QtQuick 2.2
@@ -26,7 +28,7 @@ import QtQuick.Dialogs 1.2
 
 
 MuseScore {
-      version:  "3.5"
+      version:  "3.6"
       description: "This plugin generates custom trills with baroque details."
       menuPath: "Plugins.Triller"
       id: dlg
