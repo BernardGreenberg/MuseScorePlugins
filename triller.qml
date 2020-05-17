@@ -319,12 +319,14 @@ MuseScore {
     Dialog {
         id: rootDialog
         visible: false // shown when onRun is emitted
-        standardButtons: Qt.NoButton
+
+        standardButtons: StandardButton.Apply | StandardButton.Cancel
+        onApply: maybe_finish();
+        onRejected: rootDialog.visible = false;
 
         GridLayout {
             id: mainLayout
             anchors.fill: parent
-            anchors.margins: 10
             columns: 2
 
             //   Row 0
@@ -473,26 +475,6 @@ MuseScore {
               }
             }
 
-
-            // Row 7
-
-            Button {
-                id: applyButton
-                Layout.columnSpan:1
-                text: qsTranslate("PrefsDialogBase", "Apply")
-                onClicked: {
-                    maybe_finish()
-                }
-            }
-
-            Button {
-                id: cancelButton
-                Layout.columnSpan: 1
-                text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
-                onClicked: {
-                    rootDialog.visible = false;
-                }
-            }
         }
     }
 
