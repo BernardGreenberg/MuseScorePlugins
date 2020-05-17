@@ -1,4 +1,4 @@
-* **16 Mar 2020** **triller.qml 3.6** uses a different Qt technique to implement its modal dialog, which causes it not to take down the nonmodal dialogs of docking plugins such as **DockArticulate.qml**.  All MuseScore modal dialog plugins should do the same. Thanks to Rémi Marche (Marr11317@github) for discovering/advising this technique (![use of QtQuickDialog](https://doc.qt.io/qt-5/qml-qtquick-dialogs-dialog.html)).
+* **16 Mar 2020** **triller.qml 3.6** uses a different Qt technique to implement its modal dialog, which causes it not to take down the nonmodal dialogs of docking plugins such as **DockArticulate.qml**.  All MuseScore modal dialog plugins should do the same. Thanks to Rémi Marche (Marr11317@github) for discovering/advising this technique (use of QtQuick.Dialog) (https://doc.qt.io/qt-5/qml-qtquick-dialogs-dialog.html).
 
 
 * **20 Jan 2020**  ![TrillerTurns.md](https://github.com/BernardSGreenberg/MuseScorePlugins/blob/master/TrillerTurns.md) added,explaining a non-obvious technique (how to do ”turns” with the triller plugin).
