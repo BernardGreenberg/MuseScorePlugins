@@ -347,21 +347,18 @@ MuseScore {
             // These "radio buttons" don't exclude each other.
             // We have to teach them how to do their job.
             RowLayout {
+                ExclusiveGroup { id: group1 }
                 RadioButton {
                     id: obenWhole
                     checked: true
                     text: qsTr("Ton")
-                    onClicked: {
-                        obenSemi.checked = false
-                    }
+                    exclusiveGroup: group1
                 }
 
                 RadioButton {
                     id: obenSemi
                     text: qsTr("Halbton")
-                    onClicked: {
-                        obenWhole.checked = false
-                    }
+                    exclusiveGroup: group1
                 }
             }
 
@@ -371,22 +368,19 @@ MuseScore {
                 text: "Unten ="
             }
             RowLayout {
+                ExclusiveGroup { id: group2 }
+
                 RadioButton {
                     id: untenWhole
                     text: qsTr("Ton")
-                    onClicked: {
-                        untenSemi.checked = false
-                    }
+                    exclusiveGroup: group2
                 }
-
 
                 RadioButton {
                     id: untenSemi
                     checked: true
                     text: qsTr("Halbton")
-                    onClicked : {
-                        untenWhole.checked = false
-                    }
+                    exclusiveGroup: group2
                 }
             }
 
@@ -397,31 +391,23 @@ MuseScore {
             }
 
             RowLayout {
+                ExclusiveGroup { id: group3 }
+
                 RadioButton {
                     id: vorOben
                     text: qsTr("von oben")
-                    onClicked: {
-                        vorUnten.checked = false
-                        keinVorschlag.checked = false
-                    }
+                    exclusiveGroup: group3
                 }
                 RadioButton {
                     id: vorUnten
                     text: qsTr("von unten")
-                    onClicked: {
-                        vorOben.checked = false
-                        keinVorschlag.checked = false
-                    }
+                    exclusiveGroup: group3
                 }
                 RadioButton {
                     id: keinVorschlag
                     checked: true
                     text: qsTr("kein")
-                    onClicked: {
-                        vorUnten.checked = false
-                        vorOben.checked = false
-                    }
-
+                    exclusiveGroup: group3
                 }
             }
 
