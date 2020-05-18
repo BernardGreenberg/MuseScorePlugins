@@ -1,4 +1,4 @@
-**2 October 2019 — DockArticulate.qml** (upd 10/31/2019)
+**2 October 2019 — DockArticulate.qml** (upd 5/18/2020)
 
 **DockArticulate.qml** is a new version of the **articulate.qml** plugin which stays visible, like the Inspector or palettes, and responds every single time a note is entered or otherwise selected (clicked on), or a range is selected or modified, constantly displaying on-time and off-time.  That means that all you have to do to see the on-time and off-time of a note is click on it.  The plugin "docks" in the lower-left-hand corner of the screen, under the palettes, and (like all docked UI elements) can be "undocked" and moved wherever you wish with the little arrows in its title-bar.
 
@@ -14,6 +14,6 @@ The "Show in score" functionality is slightly different.  The **Show in score** 
 
 This plugin does not (yet) replace the older one, whose usage model you might still prefer.  I'll try to maintain them in parallel; there is no convenient way to share code in this paradigm.
 
-Note that the use of any other plugin, in particular "dialog"-type plugins such as **appoggiatura.qml** or **TempoChange**, will cause **DockArticulate** to close its panel when the other plugin closes.  This is currently (3 Oct 2019) a design problem in Qt/MuseScore, and is true of any dock-type plugin. **rednote.qml** has been upgraded to ***not*** dismiss open dock plugins in this fashion (although it is not a "dialog"-type plugin).
+Note that the use of certain non-dock-type plugins, in particular "dialog"-type plugins such as **TempoChanges**, will cause **DockArticulate** to close its panel when the other plugin closes.  This is currently (18 May 2020) a design problem in Qt/MuseScore.  **rednote.qml**, **appoggiatura.qml**, and **triller.qml** have been rewritten to use a different dialog technique that does not misbehave in this way.  Hopefully, **TempoChanges** and other extant dialog-type plugins not mine will be upgraded as well, but as of this morning, they still close dock-type plugins.
 
 Please report problems, especially reproducible cases of failures of other MuseScore functions when the plugin is active (displayed).
