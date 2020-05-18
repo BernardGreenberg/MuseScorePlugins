@@ -12,6 +12,7 @@
 //  the file LICENCE.GPL
 //
 //  Version 3.1 BSG    3 Sept 2019 -- separation and rename "per mille" to "main note start"
+//  Version 3.2 BSG   18 May  2020 -- use Qt quick dialog
 //=============================================================================
 
 import QtQuick 2.2
@@ -19,7 +20,7 @@ import MuseScore 3.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.3
 import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs 1.2
 
 /*  The need for this is explained in https://musescore.com/bsg/scores/5446640, let alone the issue
 that customization of "how much is eaten out of the main note" by an appoggiatura ought to be
@@ -46,11 +47,10 @@ TBD: Recognize and handle unrealized appoggiature
 */
 
 MuseScore {
-      version:  "3.1"
+      version:  "3.2"
       description: "This plugin adjusts the duration of an appoggiatura."
       menuPath: "Plugins.Appoggiatura"
 
-      pluginType: "dialog"
       requiresScore: true
 
       property int margin: 10
@@ -63,7 +63,7 @@ MuseScore {
       onRun: {
           if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
               versionError.open()
-              Qt.quit();
+              rootDialog.visible = false;
               return;
            }
           console.log("hello adjust appoggiatura: onRun");
@@ -73,10 +73,11 @@ MuseScore {
               the_note = note_info.note;
               mainNoteStart.text = note_info.main_start + "";
 	      separation.text = note_info.separation + "";
+              rootDialog.visible = true;
           } else {
               console.log("onRun didn't find a usable appogg")
               complaintDialog.open()
-              Qt.quit();
+              rootDialog.visible = false;
           }
       }
 
@@ -199,63 +200,57 @@ MuseScore {
 
     function maybe_finish() {
         if (applyChanges()) {
-            Qt.quit();
+            rootDialog.visible = false;
         }
     }
 
-    GridLayout {
-        id: 'mainLayout'
-        anchors.fill: parent
-        anchors.margins: 10
-        columns: 2
+    Dialog {
+        id: rootDialog
+        visible: false // shown when onRun is emitted
+        title: "Appoggiatura";
 
-        Label {
-            text:  "Main note start ‰"
-        }
-        TextField {
-            id: mainNoteStart
-            implicitHeight: 24
-            placeholderText: "/1000"
-            focus: true
-            Keys.onEscapePressed : {
-                Qt.quit()
-            }
-            Keys.onReturnPressed : {
-                maybe_finish();
-            }
-        }
-	Label {
-            text:  "Separation ‰"
-        }
-        TextField {
-            id: separation
-            implicitHeight: 24
-            placeholderText: "0"
-            focus: false
-            Keys.onEscapePressed : {
-                Qt.quit()
-            }
-            Keys.onReturnPressed : {
-                maybe_finish();
-            }
-        }
-        Button {
-            id: applyButton
-            Layout.columnSpan:1
-            text: qsTranslate("PrefsDialogBase", "Apply")
-            onClicked: {
-                maybe_finish();
-            }
-        }
+        standardButtons: StandardButton.Apply | StandardButton.Cancel
+        onApply: maybe_finish();
+        onRejected: rootDialog.visible = false;
 
-        Button {
-            id: cancelButton
-            Layout.columnSpan: 1
-            text: qsTranslate("InsertMeasuresDialogBase", "Cancel")
-            onClicked: {
-                Qt.quit();
+        GridLayout {
+            id: 'mainLayout'
+            anchors.fill: parent
+            anchors.margins: 10
+            columns: 2
+
+            Label {
+                text:  "Main note start ‰"
             }
-        }
+            TextField {
+                id: mainNoteStart
+                implicitHeight: 24
+                placeholderText: "/1000"
+                focus: true
+                Keys.onEscapePressed : {
+                    rootDialog.visible = false;
+                }
+                Keys.onReturnPressed : {
+                    maybe_finish();
+                }
+            }
+            Label {
+                text:  "Separation ‰"
+            }
+            TextField {
+                id: separation
+                implicitHeight: 24
+                placeholderText: "0"
+                focus: false
+                Keys.onEscapePressed : {
+                    rootDialog.visible = false;
+                }
+                Keys.onReturnPressed : {
+                    maybe_finish();
+                }
+            }
+
+        } // end of grid
 
     }
 
@@ -271,7 +266,7 @@ MuseScore {
          "any appoggiature before them."
      onAccepted: {
          console.log("Messagedlg onaccepted");
-         Qt.quit()
+         rootDialog.visible = false;
       }
    }
 
@@ -282,7 +277,7 @@ MuseScore {
       title: qsTr("Unsupported MuseScore Version")
       text: qsTr("This plugin needs MuseScore 3.3 or later")
       onAccepted: {
-         Qt.quit()
+          rootDialog.visible = false;
          }
       }
 }
