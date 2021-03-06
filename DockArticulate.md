@@ -14,6 +14,6 @@ The "Show in score" functionality is slightly different.  The **Show in score** 
 
 This plugin does not (yet) replace the older one, whose usage model you might still prefer.  I'll try to maintain them in parallel; there is no convenient way to share code in this paradigm.
 
-Note that the use of certain other plugins, will cause **DockArticulate** to close its panel when the other plugin closes.  This is currently (18 May 2020) a design problem in Qt/MuseScore.  **rednote.qml**, **appoggiatura.qml**, and **triller.qml** have been rewritten to use a different dialog technique that does not misbehave in this way. Significantly, the very useful **TempoChanges** plugin has been fixed as of version 3.4.0 (May 2020), and is now ***not*** among those plugins provoking this behavior.
+Note that the simultaneous use of certain other plugins will cause **DockArticulate** to close its panel when the other plugin closes.  This is currently (18 May 2020) a design problem in Qt/MuseScore.  **rednote.qml**, **appoggiatura.qml**, and **triller.qml** have been rewritten to use a different dialog technique that does not misbehave in this way. Significantly, the very useful **TempoChanges** plugin has been fixed as of version 3.4.0 (May 2020), and is now ***not*** among those plugins provoking this behavior.
 
 Please report problems, especially reproducible cases of failures of other MuseScore functions when the plugin is active (displayed).
