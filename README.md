@@ -29,10 +29,10 @@ Version 3.1 supports annotating scores with on-time/off-time numbers. See [CHANG
 
 Here are four posted scores, two serious, completely-rendered Bach movements, and a two short demos.
 
-* [Demo of a Bach chorus with almost every note phrased, with text awareness (_Gute Nacht, o Wesen_, BWV 227#9)](https://musescore.com/bsg/gute_nacht_o_wesen)
-* [Demo of a renowned Bach aria with all parts fully phrased and customized *appoggiature* (_Erbarme dich_, StMP)](https://musescore.com/bsg/erbarme_dich)
-* [Demo of simulated violin polyphonic cross-bowing (opening of Bach Chaconne)](https://musescore.com/bsg/phrased_chaconne_intro)
-* [Demo of trill generator results](https://musescore.com/bsg/scores/5658151)
+* [Demo of a Bach chorus with almost every note phrased, with text awareness (_Gute Nacht, o Wesen_, BWV 227#9)](https://BernardGreenberg.com/Scores/gute_nacht_o_wesen)
+* [Demo of a renowned Bach aria with all parts fully phrased and customized *appoggiature* (_Erbarme dich_, StMP)](https://BernardGreenberg.com/Scores/erbarme_dich)
+* [Demo of simulated violin polyphonic cross-bowing (opening of Bach Chaconne)](https://BernardGreenberg.com/Scores/phrased_chaconne_intro)
+* [Demo of trill generator results](https://BernardGreenberg.com/Scores/5658151)
 
 And as lagniappe I offer:
 
