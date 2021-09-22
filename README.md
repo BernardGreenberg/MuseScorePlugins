@@ -1,6 +1,8 @@
 # MuseScorePlugins
 My QML Plugins for the MuseScore application
 
+**New 9/21/2021 — I have created a 12 minute instruction video on the articulation plugin:**  https://youtu.be/HXM7WoR2TPk. It shows _why_ you should use it, as well.
+
 Working with Dale Larson, Matt McClinch, and Dmitri Ovodok (@dmitrio95), we have effected changes to MuseScore that I have wanted for a long time, to wit, the ability to customize note and appoggiatura attack and release parameters from plugins toward artistic performance realization.
 
 The (long-intended) result of this is a trio of plugins hosted here, which allow customization of note attack and release, fraction of a note consumed by one or more _appoggiature_, and customized Baroque trills, on an individual note (or selection) basis, via straightforward, convenient GUI interface, removing the need ever to deal with the arcane and cumbersome Piano Roll Editor or “hacked *portati*” or other articulations. Hopefully, with some exposure and design iteration, these will become “standard plugins”, although I would like to see this functionality in the core.
@@ -20,6 +22,8 @@ The plugins and their musical effects are:
 * **articulation.qml** — (most useful if a plugin shortcut key is defined; I use ctrl-alt T). Allows the setting of on-time and off-time (initially 0 and 1000) to any value, allowing literally a thousand degrees of detachment or smoothness, providing complete and easy effectuation of phrasing. Some of my favorite non-1000 off-times are 500 (staccato), 850, 900, 920, 960. On-time adjustment is mainly useful for simulating violin "cross-bowing". Click on a note, type the shortcut, change the value(s), and click Apply or Cancel (or press Enter or ESC). If a region (blue box) is selected, you can impose an off-time on the whole passage (or staff or score as you select): this is also (non-obviously) useful to select simultaneous notes in _adjacent staves_ to phrase them identically, i.e., as a chord. All effects are undoable. The plugin can also be invoked simply to learn the on/off times of a note in a score (just dismiss it with ESC). \
 \
 Version 3.1 supports annotating scores with on-time/off-time numbers. See [CHANGES.md](https://github.com/BernardGreenberg/MuseScorePlugins/blob/master/CHANGES.md). \
+\
+(21 Sep 2021) See the instruction video on it, https://youtu.be/HXM7WoR2TPk, as well.\
 \
 (2 Oct 2019) There is a new version, [DockArticulate.qml](https://github.com/BernardGreenberg/MuseScorePlugins/blob/master/DockArticulate.qml), which provides the same functionality as an always-visible "dock plugin", which is considerably more convenient.  See [DockArticulate.md](https://github.com/BernardGreenberg/MuseScorePlugins/blob/master/DockArticulate.md).
 
