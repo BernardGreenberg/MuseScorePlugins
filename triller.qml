@@ -24,49 +24,71 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.3
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
+import Qt.labs.settings 1.0
 
 
 MuseScore {
-      version:  "3.5"
-      description: "This plugin generates custom trills with baroque details."
-      menuPath: "Plugins.Triller"
-      id: dlg
+    version:  "3.5"
+    description: "This plugin generates custom trills with baroque details."
+    menuPath: "Plugins.Triller"
+    id: dlg
 
-      pluginType: "dialog"
-      requiresScore: true
+    pluginType: "dialog"
+    requiresScore: true
 
-      property int margin: 10
-      property var the_note : null;
+    property int margin: 10
+    property var the_note : null;
 
-      width: 400
-      height: 224
+    width: 640
+    height: 480
 
     /* Facilitates consistent automatic manipulation of the checkboxes. */
     property int n_aux_vals: 2
     property var oben_fields: [{box: obenSemi, val: 1, tpc: -5},
-                               {box: obenWhole, val: 2, tpc: 2}]
+        {box: obenWhole, val: 2, tpc: 2}]
     property var unten_fields: [{box: untenSemi, val: -1, tpc: 5},
-                                {box: untenWhole, val: -2, tpc: -2}]
+        {box: untenWhole, val: -2, tpc: -2}]
 
     onRun: {
-          if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
-              versionError.open()
-              Qt.quit();
-              return;
-           }
+        if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
+            versionError.open()
+            Qt.quit();
+            return;
+        }
 
-          var note = find_usable_note();
-          if (note) {
-              the_note = note;
-              if (!analyze_current_ornaments(note))
-                  beatsField.text = ""; // "Hoc malum fecit signum..."
-              noteName.text = get_note_name(note)
-              augment_auxiliary_names(oben_fields, note.tpc1);
-              augment_auxiliary_names(unten_fields, note.tpc1);
-          } else {
-              complain("No ornamentable note selected.")
-              Qt.quit();
-          }
+        var note = find_usable_note();
+        if (note) {
+            the_note = note;
+            if (!analyze_current_ornaments(note))
+                beatsField.text = ""; // "Hoc malum fecit signum..."
+            noteName.text = get_note_name(note)
+            augment_auxiliary_names(oben_fields, note.tpc1);
+            augment_auxiliary_names(unten_fields, note.tpc1);
+        } else {
+            complain("No ornamentable note selected.")
+            Qt.quit();
+        }
+    }
+
+    Settings {
+        id: settings
+        category: "Plugin-Triller"
+        property alias midpointSlider: midpointSlider.value
+        property alias curveType: curveType.currentIndex
+    }
+
+    function getFloatFromInput(input)
+    {
+        var value = input.text;
+        if (value == "") {
+            value = input.placeholderText;
+        }
+        return parseFloat(value);
+    }
+
+    function getExpFromInput(input)
+    {
+        return getFloatFromInput(input) / 100;
     }
 
     function set_auxiliary_check(aux, val, default_val) {
@@ -180,12 +202,12 @@ MuseScore {
         // Look for final mordent
 
         if (   compare_pattern(lens, N-4,    [minlen, minlen, minlen, minlen])
-            && compare_pattern(pitches, N-4, [maxpitch, 0, minpitch, 0])) {
+                && compare_pattern(pitches, N-4, [maxpitch, 0, minpitch, 0])) {
 
             nachMordent.checked = true;
             cb_baroque.checked = true;
         } else if (   compare_pattern(lens, N-4,    [minlen, minlen, minlen, minlen])
-                    && compare_pattern(pitches, N-4, [0, maxpitch, 0, minpitch])) {
+                   && compare_pattern(pitches, N-4, [0, maxpitch, 0, minpitch])) {
             nachMordent.checked = true;
             cb_baroque.checked = false;
         } else if (pitches[N-1] == 0) { // Look for baroque if there is no final mordent
@@ -271,7 +293,7 @@ MuseScore {
         var final_milles = parseInt(finalField.text);
         if (isNaN(final_milles) || final_milles < 0 || final_milles >=1000) {
             return false;
-         }
+        }
         
         var program = []
         var trill_beats = beats
@@ -282,7 +304,7 @@ MuseScore {
             for (var i = 0; i < len; i++)
                 program.push(prog[i]);
         }
-                
+
         if (nachschlag_mordent) {
             trill_beats -= 2;
         }
@@ -303,16 +325,16 @@ MuseScore {
         var reps = Math.floor(trill_beats / 2);
         for (var i = 0; i < reps; i++ ) {
             if (baroque_trill) {
-                  ppush([oben_steps, 0]);
+                ppush([oben_steps, 0]);
             } else {
-                  ppush([0, oben_steps]);
+                ppush([0, oben_steps]);
             }
         }
         if (nachschlag_mordent) {
             if (baroque_trill) {
-                  ppush([unten_steps, 0]);
+                ppush([unten_steps, 0]);
             } else {
-                  ppush([0, unten_steps]);
+                ppush([0, unten_steps]);
             }
         }
         return function() {install_trill(note, program, final_milles);};
@@ -322,23 +344,33 @@ MuseScore {
         var trillable_len = 1000 - final_milles;
         var len = Math.floor(trillable_len/program.length);
         var time = 0;
+        var time_lin = 0;
         console.log("Final program:", program)
         curScore.startCmd();
         note.playEvents = []
         var playEvents = note.playEvents;
+
+        // for expressive expansion:
+        var midPoint = ((curveType.isLinear) ? 50.0 : midpointSlider.value) / 100; //linear == hit midpoint at 50% tickRange
+        var p = Math.log(0.5) / Math.log(midPoint);
+        console.log("Expansion p:", p)
+
         for (var i = 0; i < program.length; i++) {
             var pevt = note.createPlayEvent()
             pevt.pitch = program[i];
             pevt.ontime = time;
             if (final_milles && i == program.length - 1) {
-                 len += final_milles;
+                len += final_milles;
             }
             pevt.len = len;
             playEvents.push(pevt)                 // Append to list
-            time += len;
+            time_lin += len;
+
+            // expression
+            time = trillable_len*Math.pow((i + 1)/program.length, p);
         }
         curScore.endCmd();
-    }   
+    }
 
     function maybe_finish() {
         var continuation = generateTrill();
@@ -352,12 +384,15 @@ MuseScore {
         id: 'mainLayout'
         anchors.fill: parent
         anchors.margins: 10
-        columns: 2
+        columns: 3
+
+        focus: true
 
         //   Row 0
 
         Label {
             text: "Note"
+            Layout.columnSpan:2
         }
         Label {
             id: noteName
@@ -372,6 +407,7 @@ MuseScore {
         // These "radio buttons" don't exclude each other.
         // We have to teach them how to do their job.
         RowLayout {
+            Layout.columnSpan:2
             RadioButton {
                 id: obenWhole
                 checked: true
@@ -384,6 +420,7 @@ MuseScore {
             RadioButton {
                 id: obenSemi
                 text: qsTr("Halbton")
+                Layout.columnSpan:2
                 onClicked: {
                     obenWhole.checked = false
                 }
@@ -396,6 +433,7 @@ MuseScore {
             text: "Unten ="
         }
         RowLayout {
+            Layout.columnSpan:2
             RadioButton {
                 id: untenWhole
                 text: qsTr("Ton")
@@ -409,6 +447,7 @@ MuseScore {
                 id: untenSemi
                 checked: true
                 text: qsTr("Halbton")
+                Layout.columnSpan:2
                 onClicked : {
                     untenWhole.checked = false
                 }
@@ -422,6 +461,7 @@ MuseScore {
         }
 
         RowLayout {
+            Layout.columnSpan:2
             RadioButton {
                 id: vorOben
                 text: qsTr("von oben")
@@ -457,6 +497,7 @@ MuseScore {
         }
 
         RowLayout {
+            Layout.columnSpan:2
             CheckBox {
                 id: nachMordent
                 checked: false
@@ -478,6 +519,7 @@ MuseScore {
         TextField {
             id: beatsField
             implicitHeight: 24
+            Layout.columnSpan:2
             text: "8"
             focus: true
             Keys.onReturnPressed : {
@@ -490,28 +532,228 @@ MuseScore {
         
         // Row 6
 
-       Label {
-          text: "Final ‰"
-       }
-       TextField {
-          id: finalField
-          implicitHeight: 24
-          text: "0"
-          focus: false
-          Keys.onReturnPressed: {
-              maybe_finish()
-          }
-          Keys.onEscapePressed: {
-             Qt.quit()
-          }
+        Label {
+            text: "Final ‰"
+        }
+        TextField {
+            id: finalField
+            implicitHeight: 24
+            Layout.columnSpan:2
+            text: "0"
+            focus: false
+            Keys.onReturnPressed: {
+                maybe_finish()
+            }
+            Keys.onEscapePressed: {
+                Qt.quit()
+            }
         }
 
 
         // Row 7
+        Label {
+            text: qsTr("Expansion:")
+            Layout.columnSpan:2
+        }
+        Canvas {
+            id: canvas
+            Layout.rowSpan: 4
+            Layout.minimumWidth: 102
+            Layout.minimumHeight: 102
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            onPaint: {
+                var w = canvas.width;
+                var h = canvas.height;
+                var ctx = getContext("2d");
+
+                //square plot area
+                var length = (w > h) ? h : w;
+                var top = (h - length) / 2;
+                var left = (w - length) / 2;
+                ctx.clearRect(0, 0, w, h);
+                ctx.fillStyle = '#555555';
+                ctx.fillRect(left, top, length, length);
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(left, top, length, length);
+
+                //grid lines
+                ctx.strokeStyle = '#888888';
+                ctx.beginPath();
+                var divisions = 4;
+                for (var i = divisions - 1; i > 0; --i) {
+                    //vertical
+                    ctx.moveTo(left + ((i*length)/divisions), top);
+                    ctx.lineTo(left + ((i*length)/divisions), top+length);
+                    //horizontal
+                    ctx.moveTo(left         , top + ((i*length)/divisions));
+                    ctx.lineTo(left + length, top + ((i*length)/divisions));
+                }
+                ctx.stroke();
+
+                //graph
+                ctx.strokeStyle = '#abd3fb';
+                ctx.lineWidth = 2;
+                var start = 0; //= getFloatFromInput(startExpValue);
+                var end = 100;
+                var midPoint = ((curveType.isLinear) ? 50.0 : midpointSlider.value) / 100;
+                ctx.beginPath();
+                ctx.moveTo(left + length, (start > end) ? top + length : top);
+                for (var x = length; x >= 0; --x) {
+                    var outputPct = Math.pow((x / length), (Math.log(0.5) / Math.log(midPoint)));
+                    var newY = (start > end) ? (top + (outputPct * length)) : (top + length - (outputPct * length));
+                    ctx.lineTo(left + x, newY);
+                }
+                ctx.stroke();
+
+                //write BPMs
+                //                      canvasStartExp.text = start;
+                //                      canvasStartExp.topPadding = (start > end) ? (top + 2) : (top + length - canvasStartExp.contentHeight - 2);
+//                canvasEndExp.text = end;
+//                canvasEndExp.topPadding = (start > end) ? (top + length - canvasEndExp.contentHeight - 2): (top + 2);
+                //keep them inside the grid or is there enough room next to it?
+                //var longestBPMText = Math.max(canvasStartExp.contentWidth, canvasEndExp.contentWidth);
+                //                      if ((longestBPMText + 2 + 2) < left) {
+                //                            //outside
+                //                            //canvasStartExp.leftPadding = left - 2 - canvasStartExp.contentWidth;
+                //                            canvasEndExp.leftPadding = left - 2 - canvasEndExp.contentWidth;
+                //                      }
+                //                      else {
+                //                            //inside
+                //                            //canvasStartExp.leftPadding = left + 2;
+                //                            canvasEndExp.leftPadding = left + 2;
+                //                      }
+            }
+            //                Label {
+            //                      id: canvasStartExp
+            //                      color: '#d8d8d8'
+            //                }
+//            Label {
+//                id: canvasEndExp
+//                color: '#d8d8d8'
+//            }
+        } //end of Canvas
+
+        //          Label {
+        //                text: qsTr("Start expansion:")
+        //          }
+        //          TextField {
+        //                id: startExpValue
+        //                placeholderText: '50'
+        //                validator: DoubleValidator { bottom: 1;/* top: 512;*/ decimals: 1; notation: DoubleValidator.StandardNotation; }
+        //                implicitHeight: 24
+        //                onTextChanged: { canvas.requestPaint(); }
+        //          }
+
+//        Label {
+//            text: qsTr("End expansion:")
+//            Layout.rowSpan: 3
+//        }
+//        TextField {
+//            id: endExpValue
+//            placeholderText: '50'
+//            validator: DoubleValidator { bottom: 1;/* top: 512;*/ decimals: 1; notation: DoubleValidator.StandardNotation; }
+//            implicitHeight: 24
+//            Layout.rowSpan: 3
+//            onTextChanged: { canvas.requestPaint(); }
+//        }
+        ComboBox {
+            id: curveType
+            model: ListModel {
+                ListElement { text: qsTr("Linear") }
+                ListElement { text: qsTr("Curved") }
+            }
+            Layout.preferredWidth: 100
+            Layout.columnSpan:2
+
+            property bool isLinear: {
+                return (curveType.currentText === qsTr("Linear"));
+            }
+
+            onCurrentIndexChanged: {
+                canvas.requestPaint();
+            }
+        }
+        Label {
+            text: qsTr("midpoint:")
+            Layout.alignment: Qt.AlignRight
+        }
+        Slider {
+            id: midpointSlider
+            Layout.fillWidth: true
+
+            minimumValue: 1
+            maximumValue: 99
+            value: 75.0
+            stepSize: 0.1
+
+            enabled: !curveType.isLinear
+
+            style: SliderStyle {
+                groove: Rectangle { //background
+                    id: grooveRect
+                    implicitHeight: 6
+                    color: (enabled) ? '#555555' : '#565656'
+                    radius: implicitHeight
+                    border {
+                        color: '#888888'
+                        width: 1
+                    }
+
+                    Rectangle {
+                        //value fill
+                        implicitHeight: grooveRect.implicitHeight
+                        implicitWidth: styleData.handlePosition
+                        color: (enabled) ? '#abd3fb' : '#567186'
+                        radius: grooveRect.radius
+                        border {
+                            color: '#888888'
+                            width: 1
+                        }
+                    }
+                }
+                handle: Rectangle {
+                    anchors.centerIn: parent
+                    color: (enabled) ? (control.pressed ? '#ffffff': '#d8d8d8') : '#565656'
+                    border.color: '#666666'
+                    border.width: 1
+                    implicitWidth: 16
+                    implicitHeight: 16
+                    radius: 8
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
+
+            SpinBox {
+                id: sliderValue
+                Layout.preferredWidth: 60
+
+                minimumValue: midpointSlider.minimumValue
+                maximumValue: midpointSlider.maximumValue
+                value: midpointSlider.value
+                decimals: 1
+                stepSize: midpointSlider.stepSize
+
+                onValueChanged: {
+                    midpointSlider.value = value;
+                    canvas.requestPaint();
+                }
+
+                enabled: !curveType.isLinear
+            }
+            Label { text: '%' }
+        }
+
+        // Row 8
 
         Button {
             id: applyButton
-            Layout.columnSpan:1
+            Layout.columnSpan:2
             text: qsTranslate("PrefsDialogBase", "Apply")
             onClicked: {
                 maybe_finish()
@@ -526,34 +768,47 @@ MuseScore {
                 Qt.quit()
             }
         }
-    }
+
+
+    } // End of GridLayout
 
     function complain(text) {
         complaintDialog.text = text;
         complaintDialog.open();
     }
 
- MessageDialog {
-      id: complaintDialog
-      icon: StandardIcon.Warning
-      standardButtons: StandardButton.Ok
-      modality: Qt.ApplicationModal
-      title: "Trill generator usage error"
-      text: "Triller usage error."
-      onAccepted: {
-         Qt.quit()
-      }
-   }
+    MessageDialog {
+        id: complaintDialog
+        icon: StandardIcon.Warning
+        standardButtons: StandardButton.Ok
+        modality: Qt.ApplicationModal
+        title: "Trill generator usage error"
+        text: "Triller usage error."
+        onAccepted: {
+            Qt.quit()
+        }
+    }
 
     
- MessageDialog {
-      id: versionError
-      visible: false
-      title: qsTr("Unsupported MuseScore Version")
-      text: qsTr("This plugin needs MuseScore 3.3 or later")
-      onAccepted: {
-         Qt.quit()
-         }
-      }
+    MessageDialog {
+        id: versionError
+        visible: false
+        title: qsTr("Unsupported MuseScore Version")
+        text: qsTr("This plugin needs MuseScore 3.3 or later")
+        onAccepted: {
+            Qt.quit()
+        }
+    }
 
+    Keys.onEscapePressed: {
+          dlg.parent.Window.window.close();
+    }
+    Keys.onReturnPressed: {
+          maybe_finish();
+          dlg.parent.Window.window.close();
+    }
+    Keys.onEnterPressed: {
+          maybe_finish();
+          dlg.parent.Window.window.close();
+    }
 }
