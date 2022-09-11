@@ -227,7 +227,7 @@ MuseScore {
    }
 
     function is_num(val) {
-	return /^\d+$/.test(val);
+	return /^-?\d+$/.test(val); // Allow negative values for off-beat articulations
     }
 
     function applyChanges() {
