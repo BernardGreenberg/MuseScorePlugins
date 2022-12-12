@@ -43,11 +43,13 @@ MuseScore {
     height: 480
 
     /* Facilitates consistent automatic manipulation of the checkboxes. */
-    property int n_aux_vals: 2
+    property int n_aux_vals: 3
     property var oben_fields: [{box: obenSemi, val: 1, tpc: -5},
-        {box: obenWhole, val: 2, tpc: 2}]
+        {box: obenWhole, val: 2, tpc: 2},
+        {box: obenSesqui, val: 3, tpc: -3}]
     property var unten_fields: [{box: untenSemi, val: -1, tpc: 5},
-        {box: untenWhole, val: -2, tpc: -2}]
+        {box: untenWhole, val: -2, tpc: -2},
+        {box: untenSesqui, val: -3, tpc: 3}]
 
     onRun: {
         if ((mscoreMajorVersion < 3) || (mscoreMinorVersion < 3)) {
@@ -409,11 +411,22 @@ MuseScore {
         RowLayout {
             Layout.columnSpan:2
             RadioButton {
+                id: obenSesqui
+                //checked: true
+                text: qsTr("3/2 Ton")
+                onClicked: {
+                    obenSemi.checked = false
+                    obenWhole.checked = false
+                }
+            }
+            
+            RadioButton {
                 id: obenWhole
                 checked: true
                 text: qsTr("Ton")
                 onClicked: {
                     obenSemi.checked = false
+                    obenSesqui.checked = false
                 }
             }
 
@@ -423,6 +436,7 @@ MuseScore {
                 Layout.columnSpan:2
                 onClicked: {
                     obenWhole.checked = false
+                    obenSesqui.checked = false
                 }
             }
         }
@@ -435,10 +449,20 @@ MuseScore {
         RowLayout {
             Layout.columnSpan:2
             RadioButton {
+                id: untenSesqui
+                text: qsTr("3/2 Ton")
+                onClicked: {
+                    untenSemi.checked = false
+                    untenWhole.checked = false
+                }
+            }
+            
+            RadioButton {
                 id: untenWhole
                 text: qsTr("Ton")
                 onClicked: {
                     untenSemi.checked = false
+                    untenSesqui.checked = false
                 }
             }
 
@@ -450,6 +474,7 @@ MuseScore {
                 Layout.columnSpan:2
                 onClicked : {
                     untenWhole.checked = false
+                    untenSesqui.checked = false
                 }
             }
         }
