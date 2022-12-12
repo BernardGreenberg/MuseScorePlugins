@@ -577,7 +577,7 @@ MuseScore {
 
         // Row 7
         Label {
-            text: qsTr("Expansion:")
+            text: qsTr("Expressive expansion:")
             Layout.columnSpan:2
         }
         Canvas {
@@ -633,57 +633,12 @@ MuseScore {
                 }
                 ctx.stroke();
 
-                //write BPMs
-                //                      canvasStartExp.text = start;
-                //                      canvasStartExp.topPadding = (start > end) ? (top + 2) : (top + length - canvasStartExp.contentHeight - 2);
-//                canvasEndExp.text = end;
-//                canvasEndExp.topPadding = (start > end) ? (top + length - canvasEndExp.contentHeight - 2): (top + 2);
-                //keep them inside the grid or is there enough room next to it?
-                //var longestBPMText = Math.max(canvasStartExp.contentWidth, canvasEndExp.contentWidth);
-                //                      if ((longestBPMText + 2 + 2) < left) {
-                //                            //outside
-                //                            //canvasStartExp.leftPadding = left - 2 - canvasStartExp.contentWidth;
-                //                            canvasEndExp.leftPadding = left - 2 - canvasEndExp.contentWidth;
-                //                      }
-                //                      else {
-                //                            //inside
-                //                            //canvasStartExp.leftPadding = left + 2;
-                //                            canvasEndExp.leftPadding = left + 2;
-                //                      }
+
             }
-            //                Label {
-            //                      id: canvasStartExp
-            //                      color: '#d8d8d8'
-            //                }
-//            Label {
-//                id: canvasEndExp
-//                color: '#d8d8d8'
-//            }
+
         } //end of Canvas
 
-        //          Label {
-        //                text: qsTr("Start expansion:")
-        //          }
-        //          TextField {
-        //                id: startExpValue
-        //                placeholderText: '50'
-        //                validator: DoubleValidator { bottom: 1;/* top: 512;*/ decimals: 1; notation: DoubleValidator.StandardNotation; }
-        //                implicitHeight: 24
-        //                onTextChanged: { canvas.requestPaint(); }
-        //          }
 
-//        Label {
-//            text: qsTr("End expansion:")
-//            Layout.rowSpan: 3
-//        }
-//        TextField {
-//            id: endExpValue
-//            placeholderText: '50'
-//            validator: DoubleValidator { bottom: 1;/* top: 512;*/ decimals: 1; notation: DoubleValidator.StandardNotation; }
-//            implicitHeight: 24
-//            Layout.rowSpan: 3
-//            onTextChanged: { canvas.requestPaint(); }
-//        }
         ComboBox {
             id: curveType
             model: ListModel {
@@ -709,9 +664,9 @@ MuseScore {
             id: midpointSlider
             Layout.fillWidth: true
 
-            minimumValue: 1
-            maximumValue: 99
-            value: 75.0
+            minimumValue: 25 //1
+            maximumValue: 75 //99 -> range reduced to make the centre less sensitive
+            value: 50.0
             stepSize: 0.1
 
             enabled: !curveType.isLinear
