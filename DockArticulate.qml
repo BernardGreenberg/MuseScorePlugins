@@ -5,6 +5,7 @@
 //  Copyright (C) 2012 Werner Schweer
 //  Copyright (C) 2013-2017 Nicolas Froment, Joachim Schmitz
 //  Copyright (C) 2019 Bernard Greenberg
+//  Copyright (C) 2023 XiaoMigros
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -13,6 +14,7 @@
 //
 //  3.4 - 4 Oct 19 - clear_all if click on non-note.
 //  3.5 - 5 Oct 19 - complex test for the latter for click-once on blank.
+//  3.6 - 5 Apr 23 - support for list selection, only allow valid input in text fields
 //=============================================================================
 
 import QtQuick 2.2
@@ -50,7 +52,7 @@ import QtQuick.Dialogs 1.1
 
 
 MuseScore {
-      version:  "3.5"
+      version:  "3.6"
       description: "This plugin adjusts the on/off times of a note."
       menuPath: "Plugins.DockArticulate"
 
@@ -67,7 +69,7 @@ MuseScore {
       property var display_up : false
 
       width:  240
-      height: 160
+      height: 180
 
     onScoreStateChanged: {
         if (stop_recurse)
@@ -227,7 +229,7 @@ MuseScore {
    }
 
     function is_num(val) {
-	return /^-?\d+$/.test(val); // Allow negative values for off-beat articulations
+	return /^\d+$/.test(val);
     }
 
     function applyChanges() {
@@ -274,7 +276,7 @@ MuseScore {
 
 
     function applyToNotesInSelection(func) {
-
+		if (curScore.selection.isRange) {
         var cursor = curScore.newCursor();
         cursor.rewind(1);
 
@@ -322,7 +324,13 @@ MuseScore {
                 }
             }
         }
-	cursor.rewind(1);  // Score gets in non-notable state if not ....
+		cursor.rewind(1);  // Score gets in non-notable state if not ....
+		} else {
+			for (var i in curScore.selection.elements) {
+				if (curScore.selection.elements[i].type == Element.NOTE)
+					func(curScore.selection.elements[i], cursor);
+			}
+		}
     }
 
     function showTimeInScore(note, cursor) {
@@ -384,6 +392,7 @@ MuseScore {
         TextField {
             id: onTime
 	    visible: false
+		validator: IntValidator {bottom: 0}
             implicitHeight: 24
             placeholderText: "0"
             Keys.onReturnPressed : {
@@ -399,6 +408,7 @@ MuseScore {
         TextField {
             id: offTime
 	    visible : true
+		validator: IntValidator {bottom: 0}
             implicitHeight: 24
             placeholderText: "1000"
             Keys.onReturnPressed : {
