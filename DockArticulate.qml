@@ -69,7 +69,7 @@ MuseScore {
       property var display_up : false
 
       width:  240
-      height: 180
+      height: 160
 
     onScoreStateChanged: {
         if (stop_recurse)
