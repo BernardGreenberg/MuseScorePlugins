@@ -229,7 +229,7 @@ MuseScore {
    }
 
     function is_num(val) {
-	return /^\d+$/.test(val);
+	return /^-?\d+$/.test(val); // Allow negative values for off-beat articulations
     }
 
     function applyChanges() {
@@ -392,7 +392,7 @@ MuseScore {
         TextField {
             id: onTime
 	    visible: false
-		validator: IntValidator {bottom: 0}
+		validator: IntValidator {}
             implicitHeight: 24
             placeholderText: "0"
             Keys.onReturnPressed : {
@@ -408,7 +408,7 @@ MuseScore {
         TextField {
             id: offTime
 	    visible : true
-		validator: IntValidator {bottom: 0}
+		validator: IntValidator {}
             implicitHeight: 24
             placeholderText: "1000"
             Keys.onReturnPressed : {
