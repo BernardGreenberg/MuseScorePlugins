@@ -1,7 +1,7 @@
 # MuseScorePlugins
 My QML Plugins for the MuseScore application
 
-**5/24/2024 — These plugins are not usable with MuseScore ("Studio") Version 4, and I have no plans to make them so. MuseScore 3.6 is still available.**
+**5/24/2024 — These plugins are not usable with MuseScore ("Studio") Version 4, and I have no plans to make them so. MuseScore 3.6 is still available.**  Others are welcome to try, but my trials indicate that internal changes in the application require change to the latter of undetermined nature and extent.
 
 **New 9/21/2021 — I have created a 12 minute instruction video on the articulation plugin:**  https://youtu.be/HXM7WoR2TPk. It shows _why_ you should use it, as well.
 
