@@ -1,6 +1,8 @@
 # MuseScorePlugins
 My QML Plugins for the MuseScore application
 
+**5/24/2024 — These plugins are not usable with MuseScore ("Studio") Version 4, and I have no plans to make them so. MuseScore 3.6 is still available.**
+
 **New 9/21/2021 — I have created a 12 minute instruction video on the articulation plugin:**  https://youtu.be/HXM7WoR2TPk. It shows _why_ you should use it, as well.
 
 Working with Dale Larson, Matt McClinch, and Dmitri Ovodok (@dmitrio95), we have effected changes to MuseScore that I have wanted for a long time, to wit, the ability to customize note and appoggiatura attack and release parameters from plugins toward artistic performance realization.
